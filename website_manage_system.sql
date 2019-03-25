@@ -11,7 +11,7 @@
  Target Server Version : 50722
  File Encoding         : 65001
 
- Date: 23/03/2019 17:42:58
+ Date: 24/03/2019 19:43:03
 */
 
 SET NAMES utf8mb4;
@@ -37,9 +37,9 @@ CREATE TABLE `application`  (
   `application_website_ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '网站IP',
   `application_website_ip_old` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '网站之前的IP',
   `application_visit_range` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '访问范围 1：校内 0：校外',
-  `application_service_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '网站服务内容',
-  `application_website_space` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'type :  1:自有服务器 ；2：网络中心分配 ；3：其他要求',
-  `application_website_port` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '开放端口 in:校内默认80 ；out :校外，不开放',
+  `application_service_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '网站服务内容',
+  `application_website_space` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'type :  1:自有服务器 ；2：网络中心分配 ；3：其他要求',
+  `application_website_port` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开放端口 in:校内默认80 ；out :校外，不开放',
   `application_website_type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1 静态html；2：php；3：asp；4：jsp；5：其他',
   `application_website_database` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1:无；2：MySQL；3：access；4：MSSQL；5:oracle;6:其他',
   `application_interactive_column` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '交互栏目 1：无；2：用户实名注册 3：24小时监控',
@@ -136,7 +136,7 @@ CREATE TABLE `user`  (
   `user_is_quit` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否离职 1：true 0:false',
   `user_roles` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '权限 0：普通用户；1：管理员',
   PRIMARY KEY (`user_id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for website
@@ -151,8 +151,8 @@ CREATE TABLE `website`  (
   `website_ip` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '网站IP',
   `website_visit_range` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '访问范围 1：校内 0：校外',
   `website_service_content` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '网站服务内容',
-  `website_space` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT 'type :  1:自有服务器 ；2：网络中心分配 ；3：其他要求',
-  `website_port` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '开放端口 in:校内默认80 ；out :校外，不开放',
+  `website_space` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT 'type :  1:自有服务器 ；2：网络中心分配 ；3：其他要求',
+  `website_port` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '开放端口 in:校内默认80 ；out :校外，不开放',
   `website_type` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1 静态html；2：php；3：asp；4：jsp；5：其他',
   `website_database` varchar(50) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '1' COMMENT '1:无；2：MySQL；3：access；4：MSSQL；5:oracle;6:其他',
   `website_interactive_column` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '交互栏目 1：无；2：用户实名注册 3：24小时监控',
