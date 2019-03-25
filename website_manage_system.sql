@@ -104,20 +104,20 @@ CREATE TABLE `log`  (
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
--- Table structure for massage
+-- Table structure for message
 -- ----------------------------
-DROP TABLE IF EXISTS `massage`;
-CREATE TABLE `massage`  (
-  `massage_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '消息表id',
-  `massage_sender` int(5) UNSIGNED NOT NULL COMMENT '发送者工号',
-  `massage_receiver` int(5) UNSIGNED NOT NULL COMMENT '接收者工号',
-  `massage_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '消息类型 1：提交申请；2：审核未通过；3：审核通过',
-  `massage_application` int(10) UNSIGNED NOT NULL COMMENT '申请表id',
-  `massage_additional` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '消息附加内容',
-  `massage_state` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息状态1：已读  0：未读',
-  `massage_is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否软删除 1：是  0：否',
-  `massage_creat_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '消息创建时间',
-  PRIMARY KEY (`massage_id`) USING BTREE
+DROP TABLE IF EXISTS `message`;
+CREATE TABLE `message`  (
+  `message_id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT '消息表id',
+  `message_sender` int(5) UNSIGNED NOT NULL COMMENT '发送者工号',
+  `message_receiver` int(5) UNSIGNED NOT NULL COMMENT '接收者工号',
+  `message_type` tinyint(1) UNSIGNED NOT NULL DEFAULT 1 COMMENT '消息类型 1：提交申请；2：审核未通过；3：审核通过',
+  `message_application` int(10) UNSIGNED NOT NULL COMMENT '申请表id',
+  `message_additional` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '消息附加内容',
+  `message_state` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '消息状态1：已读  0：未读',
+  `message_is_del` tinyint(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '是否软删除 1：是  0：否',
+  `message_creat_time` datetime(0) NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP(0) COMMENT '消息创建时间',
+  PRIMARY KEY (`message_id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
