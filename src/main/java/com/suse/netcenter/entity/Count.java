@@ -2,12 +2,15 @@ package com.suse.netcenter.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @author Tangerg
  * @create 2019-03-25 20:09
  */
 @Data
 public class Count {
+    private Integer countID;
     private Integer countWebsite;
     private Integer countLanHtml;
     private Integer countLanPhp;
@@ -27,4 +30,5 @@ public class Count {
     private Integer countBugJurisdiction;
     private Integer countBugOther;
     private Integer countDept;
+    private Date countUpdateTime;
 }
