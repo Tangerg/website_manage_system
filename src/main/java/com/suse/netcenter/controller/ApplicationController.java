@@ -1,6 +1,9 @@
 package com.suse.netcenter.controller;
 
+import com.suse.netcenter.dto.Msg;
 import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,4 +15,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/apply")
 public class ApplicationController extends BaseController {
+    @PostMapping("/add")
+    public Msg ApplicationAdd(){
+        return null;
+    }
+    @PostMapping("/query")
+    public Msg ApplicationQuery(){
+        return null;
+    }
+    @PostMapping("/update")
+    public Msg ApplicationUpdate(){
+        return null;
+    }
 }

@@ -88,7 +88,7 @@ public class NetcenterApplicationTests {
     }
     @Test
     public void testMsg(){
-       Msg msg =  Msg.fail().addMsg("错误").addData("数据","123");
+       Msg msg =  Msg.fail().addMsg("错误").addData("user","123");
         System.out.println(msg.toString());
     }
 }

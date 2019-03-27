@@ -9,14 +9,6 @@ import java.util.Map;
  * @create 2018-10-22 18:58
  */
 public class Msg {
-    @Override
-    public String toString() {
-        return "Msg{" +
-                "code=" + code +
-                ", msg='" + msg + '\'' +
-                ", data=" + data +
-                '}';
-    }
 
     //状态码   200-成功    400-失败
     private int code;

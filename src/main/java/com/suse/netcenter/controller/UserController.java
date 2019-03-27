@@ -1,6 +1,8 @@
 package com.suse.netcenter.controller;
 
+import com.suse.netcenter.dto.Msg;
 import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -12,4 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
+
+    /*用户登录接口*/
+    @PostMapping("/login")
+    public Msg userLogin(){
+        return null;
+    }
+    /*用户查询接口*/
+    @PostMapping("/query")
+    public Msg userQuery(){
+        return null;
+    }
+    /*用户更新接口*/
+    @PostMapping("/update")
+    public Msg userUpdate(){
+        return null;
+    }
+    /*用户删除接口*/
+    @PostMapping("/delete")
+    public Msg userDelete(){
+        return null;
+    }
 }
