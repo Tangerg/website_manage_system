@@ -18,6 +18,15 @@ public class Msg {
     //要返回给浏览器的数据
     private Map<String, Object> data = new HashMap<String, Object>();
 
+    @Override
+    public String toString() {
+        return "Msg{" +
+                "code=" + code +
+                ", msg='" + msg + '\'' +
+                ", data=" + data +
+                '}';
+    }
+
     public static Msg success(){
         Msg result = new Msg();
         result.setCode(200);
