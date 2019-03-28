@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 /**
  * @author Tangerg
  * @create 2019-03-28 15:11
+ * 无需jwt
  */
 @Target({ElementType.METHOD, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
