@@ -1,15 +1,10 @@
 package com.suse.netcenter.interceptor;
 
 import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTVerifier;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.exceptions.JWTDecodeException;
-import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
+import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.util.TokenUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,9 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+
 
 /**
  * @author Tangerg
@@ -36,10 +29,6 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         HandlerMethod handlerMethod = (HandlerMethod) object;
         Method method = handlerMethod.getMethod();
 
-        /*
-         * 只存在PassToken和UserLoginToken两种情况
-         *
-         */
         //检查是否有PassToken注释，有则跳过认证
         if (method.isAnnotationPresent(PassToken.class)) {
             PassToken passToken = method.getAnnotation(PassToken.class);
@@ -47,38 +36,42 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
+        String token = request.getHeader("token");// 从 http 请求头中取出 token
         //检查是否有UserLoginToken的注解，有则检查token
         if (method.isAnnotationPresent(UserLoginToken.class)) {
-            String token = request.getHeader("token");// 从 http 请求头中取出 token
             UserLoginToken userLoginToken = method.getAnnotation(UserLoginToken.class);
             // 执行认证
             if (userLoginToken.required()) {
-                // 如果token为空
-                if (token == null || token.equals("")) {
+                // 如果token为null或者"","       "
+                if (token == null || token.isEmpty()) {
                     throw new RuntimeException("没有token，请重新登录");
                 }
                 TokenUtil tokenUtil = new TokenUtil();
+                //如果token通过校验
                 if (tokenUtil.verifyToken(token)) {
-                    // 获取 token 中的信息
-                    Map data = new HashMap<String, Claim>();
-                    String userId;
-                    String userName;
-                    String userJobNum;
-                    try {
-                        userId = JWT.decode(token).getAudience().get(0);
-                        userName = JWT.decode(token).getAudience().get(1);
-                        userJobNum = JWT.decode(token).getAudience().get(2);
-                        System.out.println(userId);
-                        System.out.println(userName);
-                        System.out.println(userJobNum);
-                    } catch (JWTDecodeException j) {
+                    // 校验token携带的数据
+                    String userId = JWT.decode(token).getAudience().get(0);
+                    String userRoles = JWT.decode(token).getAudience().get(1);
+                    String userJobNum = JWT.decode(token).getAudience().get(2);
+                    if (userId == null || userId.isEmpty() || userRoles == null || userRoles.isEmpty() || userJobNum == null || userJobNum.isEmpty()) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
+                    }
+                    //检查是否有AdminToken的注解，有则检查token
+                    if (method.isAnnotationPresent(AdminToken.class)) {
+                        AdminToken adminToken = method.getAnnotation(AdminToken.class);
+                        // 执行认证
+                        if (adminToken.required()) {
+                            if (!userRoles.equals("1")) {
+                                throw new RuntimeException("你没有权限");
+                            }
+                        }
                     }
                 } else {
                     throw new RuntimeException("token错误或已过期，请重新登录");
                 }
             }
         }
+
         return true;
     }
 

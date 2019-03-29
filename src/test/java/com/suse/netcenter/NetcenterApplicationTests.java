@@ -104,8 +104,8 @@ public class NetcenterApplicationTests {
     }
     @Test
     public void verifyToken(){
-        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsiMSIsIjEiLCIxIl0sImlzcyI6IlNpY2h1YW5Vbml2ZXJzaXR5IG9mIFNjaWVuY2UgJiBFbmdpbmVlcmluZyBOZXRDZW50ZXIiLCJleHAiOjE1NTM5MzY4MjgsImlhdCI6MTU1Mzg1MDQyOH0.7Veuz0oQfphgR6gBEgH0fiNowWpZkI9DkgjuxBfoyzs";
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsiMSIsIjEiLCIxIl0sImlzcyI6IlNpQ2h1YW5Vbml2ZXJzaXR5IG9mIFNjaWVuY2UgJiBFbmdpbmVlcmluZyBOZXRDZW50ZXIiLCJleHAiOjE1NTM5NDI1MDksImlhdCI6MTU1Mzg1NjEwOX0.PZMHF6QhWawqPI71eTpSl9QEOaOQB7ACpwi92hi7rFI";
         TokenUtil tu = new TokenUtil();
-        System.out.println(tu.verifyToken(token).toString());
+        System.out.println(tu.verifyToken(token));
     }
 }

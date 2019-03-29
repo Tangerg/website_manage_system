@@ -7,7 +7,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.suse.netcenter.entity.User;
 
 import java.util.Date;
-import java.util.Timer;
 
 /**
  * @author Tangerg

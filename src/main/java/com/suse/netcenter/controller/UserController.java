@@ -1,5 +1,6 @@
 package com.suse.netcenter.controller;
 
+import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
@@ -25,6 +26,7 @@ public class UserController extends BaseController {
     }
     /*用户查询接口*/
     @UserLoginToken
+    @AdminToken
     @PostMapping("/query")
     public Msg userQuery(){
         return null;
