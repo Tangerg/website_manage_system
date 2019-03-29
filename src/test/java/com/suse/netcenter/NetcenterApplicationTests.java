@@ -3,6 +3,7 @@ package com.suse.netcenter;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.*;
 import com.suse.netcenter.mapper.*;
+import com.suse.netcenter.util.TokenUtil;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -88,7 +89,23 @@ public class NetcenterApplicationTests {
     }
     @Test
     public void testMsg(){
-       Msg msg =  Msg.fail().addMsg("错误");
+        Msg msg =  Msg.fail().addMsg("错误");
         System.out.println(msg.toString());
+    }
+    @Test
+    public void getToken(){
+        User user = new User();
+        user.setUserId(0001);
+        user.setUserRoles(1);
+        user.setUserJobNum(0001);
+        TokenUtil tu = new TokenUtil();
+        String token = tu.createToken(user);
+        System.out.println(token);
+    }
+    @Test
+    public void verifyToken(){
+        String token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOlsiMSIsIjEiLCIxIl0sImlzcyI6IlNpY2h1YW5Vbml2ZXJzaXR5IG9mIFNjaWVuY2UgJiBFbmdpbmVlcmluZyBOZXRDZW50ZXIiLCJleHAiOjE1NTM5MzY4MjgsImlhdCI6MTU1Mzg1MDQyOH0.7Veuz0oQfphgR6gBEgH0fiNowWpZkI9DkgjuxBfoyzs";
+        TokenUtil tu = new TokenUtil();
+        System.out.println(tu.verifyToken(token).toString());
     }
 }

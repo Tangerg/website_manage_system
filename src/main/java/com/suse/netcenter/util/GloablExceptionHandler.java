@@ -15,7 +15,7 @@ public class GloablExceptionHandler {
     public Object handleException(Exception e) {
         String msg = e.getMessage();
         if (msg == null || msg.equals("")) {
-            msg = "服务器出错";
+            msg = "服务器发生错误，请稍后再试";
         }
         return Msg.fail().addMsg(msg);
     }

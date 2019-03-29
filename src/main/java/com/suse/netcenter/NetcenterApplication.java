@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-@EnableTransactionManagement  // 启注解事务管理，等同于xml配置方式的 <tx:annotation-driven />
-@MapperScan("com.suse.netcenter.mapper") //扫描mapper包位置
+@EnableTransactionManagement
+@MapperScan("com.suse.netcenter.mapper")
 @SpringBootApplication
 public class NetcenterApplication {
 
