@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
  * @create 2019-03-26 9:48
  */
 public class BaseController {
-    /*@Autowired
+    @Autowired
     ApplicationService applicationService;
     @Autowired
     DepartmentService departmentService;
     @Autowired
     InformationService informationService;
     @Autowired
-    UserService userService;*/
+    UserService userService;
 }

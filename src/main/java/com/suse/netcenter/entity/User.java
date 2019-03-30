@@ -3,6 +3,7 @@ package com.suse.netcenter.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -21,6 +22,7 @@ public class User {
     @TableField(value = "user_name")
     private String userName;
 
+    @JsonIgnore
     @TableField(value = "user_password")
     private String userPassword;
 

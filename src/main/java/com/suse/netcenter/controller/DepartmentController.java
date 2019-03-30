@@ -1,10 +1,13 @@
 package com.suse.netcenter.controller;
 
+import com.suse.netcenter.annotation.AdminToken;
+import com.suse.netcenter.annotation.UserLoginToken;
+import com.suse.netcenter.dto.DepartmentDto;
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.entity.Department;
 import io.swagger.annotations.Api;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Tangerg
@@ -14,20 +17,45 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/dept")
 public class DepartmentController extends BaseController {
+    //新增部门
+    @ApiOperation("新增部门")
+    @UserLoginToken
+    @AdminToken
     @PostMapping("/add")
-    public Msg deptAdd(){
+    public Msg deptAdd(@RequestBody Department department){
         return null;
     }
-    @PostMapping("/delete")
-    public Msg deptDelete(){
+    //删除部门
+    @ApiOperation("删除部门")
+    @UserLoginToken
+    @AdminToken
+    @PostMapping("/delete/{id}")
+    public Msg deptDelete(@PathVariable("id") Long id){
         return null;
     }
-    @PostMapping("/update")
-    public Msg deptUpdate(){
+    //修改部门
+    @ApiOperation("修改部门")
+    @UserLoginToken
+    @AdminToken
+    @PostMapping("/update/{id}")
+    public Msg deptUpdate(@PathVariable("id") Long id,@RequestBody Department department){
         return null;
     }
-    @PostMapping("/query")
-    public Msg deptQuery(){
+
+    //查询所有部门
+    @ApiOperation("查询所有部门")
+    @UserLoginToken
+    @GetMapping("/query")
+    public Msg deptQueryAll(){
+        return null;
+    }
+
+    //由部门id查看部门详情
+    @ApiOperation("由部门id查看部门详情")
+    @UserLoginToken
+    @AdminToken
+    @GetMapping("/query/{id}")
+    public Msg deptQuery(@PathVariable("id") Long id){
         return null;
     }
 
