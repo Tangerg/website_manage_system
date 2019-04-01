@@ -6,6 +6,9 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 /**
  * @author Tangerg
  * @create 2019-03-25 20:08
@@ -16,9 +19,13 @@ public class User {
     @TableId(value = "user_id")
     private Integer userId;
 
+
+    @NotNull(message = "工号不能为空")
     @TableField(value = "user_job_num")
     private Integer userJobNum;
 
+
+    @NotBlank(message = "用户名不能为空")
     @TableField(value = "user_name")
     private String userName;
 

@@ -29,12 +29,14 @@ public class Msg {
 
     public static Msg success(){
         Msg result = new Msg();
+        result.setMsg("");
         result.setCode(200);
         return result;
     }
 
     public static Msg fail(){
         Msg result = new Msg();
+        result.setMsg("");
         result.setCode(400);
         return result;
     }

@@ -2,6 +2,7 @@ package com.suse.netcenter.service;
 
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.dto.UserDto;
+import com.suse.netcenter.entity.User;
 import org.springframework.stereotype.Service;
 
 /**
@@ -11,4 +12,14 @@ import org.springframework.stereotype.Service;
 @Service
 public interface UserService {
     Msg userLogin(UserDto userDto);
+
+    Msg userAdd(User user);
+
+    Msg userDelete(Integer id);
+
+    Msg userUpdate(Integer id,User user,String token);
+
+    Msg userQueryAll(Integer pageNum, Integer pageSize);
+
+    Msg userQuery(Integer id,String token);
 }

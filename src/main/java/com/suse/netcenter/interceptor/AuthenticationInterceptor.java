@@ -43,7 +43,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             // 执行认证
             if (userLoginToken.required()) {
                 // 如果token为null或者"","       "
-                if (token == null || token.isEmpty()) {
+                if (token == null || token.trim().isEmpty()) {
                     throw new RuntimeException("没有token，请重新登录");
                 }
                 TokenUtil tokenUtil = new TokenUtil();
@@ -53,7 +53,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     String userId = JWT.decode(token).getAudience().get(0);
                     String userRoles = JWT.decode(token).getAudience().get(1);
                     String userJobNum = JWT.decode(token).getAudience().get(2);
-                    if (userId == null || userId.isEmpty() || userRoles == null || userRoles.isEmpty() || userJobNum == null || userJobNum.isEmpty()) {
+                    if (userId == null || userId.trim().isEmpty() || userRoles == null || userRoles.trim().isEmpty() || userJobNum == null || userJobNum.trim().isEmpty()) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
                     }
                     //检查是否有AdminToken的注解，有则检查token

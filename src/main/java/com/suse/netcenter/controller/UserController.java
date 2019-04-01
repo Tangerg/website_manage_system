@@ -25,7 +25,7 @@ public class UserController extends BaseController {
     @ApiOperation("用户登录")
     @PassToken
     @PostMapping("/login")
-    public Msg userLogin(@RequestBody UserDto userDto) {
+    public Msg userLogin(@Valid @RequestBody UserDto userDto) {
         return userService.userLogin(userDto);
     }
 
@@ -34,24 +34,25 @@ public class UserController extends BaseController {
     @UserLoginToken
     @AdminToken
     @GetMapping("/query")
-    public Msg userQueryAll() {
-        return null;
+    public Msg userQueryAll(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return userService.userQueryAll(pageNum, pageSize);
     }
 
     /*单个用户查询*/
     @ApiOperation("单用户查询")
     @UserLoginToken
     @GetMapping("/query/{id}")
-    public Msg userQuery(@PathVariable("id") Long id) {
-        return null;
+    public Msg userQuery(@PathVariable("id") Integer id,@RequestHeader String token) {
+        return userService.userQuery(id,token);
     }
 
     /*用户修改*/
     @ApiOperation("修改用户信息")
     @UserLoginToken
     @PostMapping("/update/{id}")
-    public Msg userUpdate(@PathVariable("id") Long id, @RequestBody User user) {
-        return null;
+    public Msg userUpdate(@PathVariable("id") Integer id, @RequestBody User user,@RequestHeader String token) {
+        return userService.userUpdate(id, user, token);
     }
 
     /*用户新增*/
@@ -60,7 +61,7 @@ public class UserController extends BaseController {
     @AdminToken
     @PostMapping("/add")
     public Msg userAdd(@RequestBody User user) {
-        return null;
+        return userService.userAdd(user);
     }
 
     /*用户删除*/
@@ -68,7 +69,7 @@ public class UserController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/delete/{id}")
-    public Msg userDelete(@PathVariable("id") Long id) {
-        return null;
+    public Msg userDelete(@PathVariable("id") Integer id) {
+        return userService.userDelete(id);
     }
 }

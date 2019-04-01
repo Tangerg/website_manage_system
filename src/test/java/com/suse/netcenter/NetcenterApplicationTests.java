@@ -1,5 +1,9 @@
 package com.suse.netcenter;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.util.CollectionUtils;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.*;
 import com.suse.netcenter.mapper.*;
@@ -10,7 +14,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -108,4 +112,22 @@ public class NetcenterApplicationTests {
         TokenUtil tu = new TokenUtil();
         System.out.println(tu.verifyToken(token));
     }
+    @Test
+    public void pageTest(){
+        System.out.println("----- baseMapper 自带分页 ------");
+        Page<User> page = new Page<>(2, 5);
+        IPage<User> userIPage = userMapper.selectPage(page,null);
+        assertThat(page).isSameAs(userIPage);
+        System.out.println("总条数 ------> " + userIPage.getTotal());
+        System.out.println("当前页数 ------> " + userIPage.getCurrent());
+        System.out.println("当前每页显示数 ------> " + userIPage.getSize());
+        print(userIPage.getRecords());
+        System.out.println("----- baseMapper 自带分页 ------");
+    }
+    private <T> void print(List<T> list) {
+        if (!CollectionUtils.isEmpty(list)) {
+            list.forEach(System.out::println);
+        }
+    }
+
 }
