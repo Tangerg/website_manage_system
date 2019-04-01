@@ -76,7 +76,7 @@ public class UserImpl implements UserService {
     public Msg userUpdate(Integer id, User user, String token) {
         String userId = JWT.decode(token).getAudience().get(0);
         String userRoles = JWT.decode(token).getAudience().get(1);
-        if ((id.equals(user.getUserId()) && user.getUserId().toString().equals(userId)) || userRoles.equals("1")) {
+        if (id.equals(user.getUserId()) && (user.getUserId().toString().equals(userId) || userRoles.equals("1"))) {
 
             try {
                 User user1 = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", id));
@@ -119,7 +119,7 @@ public class UserImpl implements UserService {
                 if (user == null || user.getUserIsQuit().equals(1)) {
                     return Msg.fail().addMsg("该用户不存在");
                 }
-                return Msg.success().addData("userInfo",user);
+                return Msg.success().addData("userInfo", user);
             } catch (Exception e) {
                 throw new RuntimeException("查询失败");
             }
