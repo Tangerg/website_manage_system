@@ -1,5 +1,7 @@
 package com.suse.netcenter.service;
 
+import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.entity.Application;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,4 +10,5 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ApplicationService {
+    Msg ApplicationAdd(Application application);
 }
