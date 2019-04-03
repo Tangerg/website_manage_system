@@ -1,9 +1,6 @@
 package com.suse.netcenter.controller;
 
-import com.suse.netcenter.service.ApplicationService;
-import com.suse.netcenter.service.DepartmentService;
-import com.suse.netcenter.service.InformationService;
-import com.suse.netcenter.service.UserService;
+import com.suse.netcenter.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -19,4 +16,6 @@ public class BaseController {
     InformationService informationService;
     @Autowired
     UserService userService;
+    @Autowired
+    WebsiteService websiteService;
 }

@@ -97,16 +97,20 @@ public class UserImpl implements UserService {
     @Override
     public Msg userQueryAll(Integer pageNum, Integer pageSize) {
         Page<User> page = new Page<>(pageNum, pageSize);
-        IPage<User> userIPage = userMapper.selectPage(page, new QueryWrapper<User>()
-                .eq("user_is_quit", 0));
-        PageDto pageDto = new PageDto();
-        pageDto.setCurrent(userIPage.getCurrent());
-        pageDto.setPages(userIPage.getPages());
-        pageDto.setSize(userIPage.getSize());
-        pageDto.setTotal(userIPage.getTotal());
-        return Msg.success()
-                .addData("pageInfo", pageDto)
-                .addData("userList", userIPage.getRecords());
+        try {
+            IPage<User> userIPage = userMapper.selectPage(page, new QueryWrapper<User>()
+                    .eq("user_is_quit", 0));
+            PageDto pageDto = new PageDto();
+            pageDto.setCurrent(userIPage.getCurrent());
+            pageDto.setPages(userIPage.getPages());
+            pageDto.setSize(userIPage.getSize());
+            pageDto.setTotal(userIPage.getTotal());
+            return Msg.success()
+                    .addData("pageInfo", pageDto)
+                    .addData("userList", userIPage.getRecords());
+        }catch (Exception e){
+            throw new RuntimeException("查询失败");
+        }
     }
 
     @Override
