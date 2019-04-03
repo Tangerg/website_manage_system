@@ -30,9 +30,9 @@ public class ApplicationController extends BaseController {
     //正式提交
     @ApiOperation("正式提交申请")
     @UserLoginToken
-    @PostMapping("/submit")
-    public Msg ApplicationSubmit(@RequestBody Application application){
-        return null;
+    @PostMapping("/submit/{id}")
+    public Msg ApplicationSubmit(@PathVariable("id") Integer id,@RequestBody Application application,@RequestHeader String token){
+        return applicationService.ApplicationSubmit(id,application,token);
     }
     //查询申请
     @ApiOperation("查询申请")
@@ -53,8 +53,8 @@ public class ApplicationController extends BaseController {
     @ApiOperation("修改申请")
     @UserLoginToken
     @PostMapping("/update/{id}")
-    public Msg ApplicationUpdate(@PathVariable("id") Integer id,@RequestBody Application application){
-        return null;
+    public Msg ApplicationUpdate(@PathVariable("id") Integer id,@RequestBody Application application,@RequestHeader String token){
+        return applicationService.ApplicationUpdate(id,application,token);
     }
     //审核申请
     @ApiOperation("审核申请")
@@ -62,6 +62,6 @@ public class ApplicationController extends BaseController {
     @AdminToken
     @PostMapping("/review/{id}")
     public Msg ApplicationReview(@PathVariable("id") Integer id,@RequestBody Application application){
-        return null;
+        return applicationService.ApplicationReview(id,application);
     }
 }

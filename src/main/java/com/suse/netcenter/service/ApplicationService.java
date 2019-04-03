@@ -13,4 +13,7 @@ public interface ApplicationService {
     Msg ApplicationAdd(Application application);
     Msg ApplicationQueryAll(String condition);
     Msg ApplicationQuery(Integer id,String token);
+    Msg ApplicationSubmit(Integer id,Application application,String token);
+    Msg ApplicationUpdate(Integer id,Application application,String token);
+    Msg ApplicationReview(Integer id,Application application);
 }
