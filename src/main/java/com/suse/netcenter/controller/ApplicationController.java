@@ -6,6 +6,7 @@ import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Application;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -29,8 +30,8 @@ public class ApplicationController extends BaseController {
     //正式提交
     @ApiOperation("正式提交申请")
     @UserLoginToken
-    @PostMapping("/submit/{id}")
-    public Msg ApplicationSubmit(@PathVariable("id") Long id,@RequestBody Application application){
+    @PostMapping("/submit")
+    public Msg ApplicationSubmit(@RequestBody Application application){
         return null;
     }
     //查询申请
@@ -38,21 +39,21 @@ public class ApplicationController extends BaseController {
     @UserLoginToken
     @AdminToken
     @GetMapping("/query")
-    public Msg ApplicationQueryAll(){
-        return null;
+    public Msg ApplicationQueryAll(@RequestParam(value = "condition", defaultValue = "1") String condition){
+        return applicationService.ApplicationQueryAll(condition);
     }
     //查询单个申请
     @ApiOperation("查询单个申请详情")
     @UserLoginToken
     @GetMapping("/query/{id}")
-    public Msg ApplicationQuery(@PathVariable("id") Long id){
-        return null;
+    public Msg ApplicationQuery(@PathVariable("id") Integer id,@RequestHeader String token){
+        return applicationService.ApplicationQuery(id,token);
     }
     //修改申请
     @ApiOperation("修改申请")
     @UserLoginToken
     @PostMapping("/update/{id}")
-    public Msg ApplicationUpdate(@PathVariable("id") Long id,@RequestBody Application application){
+    public Msg ApplicationUpdate(@PathVariable("id") Integer id,@RequestBody Application application){
         return null;
     }
     //审核申请
@@ -60,7 +61,7 @@ public class ApplicationController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/review/{id}")
-    public Msg ApplicationReview(@PathVariable("id") Long id,@RequestBody Application application){
+    public Msg ApplicationReview(@PathVariable("id") Integer id,@RequestBody Application application){
         return null;
     }
 }

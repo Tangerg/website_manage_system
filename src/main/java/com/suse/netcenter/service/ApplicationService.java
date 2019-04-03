@@ -11,4 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public interface ApplicationService {
     Msg ApplicationAdd(Application application);
+    Msg ApplicationQueryAll(String condition);
+    Msg ApplicationQuery(Integer id,String token);
 }
