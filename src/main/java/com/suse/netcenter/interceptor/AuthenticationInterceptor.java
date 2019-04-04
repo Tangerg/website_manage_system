@@ -50,10 +50,16 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 //如果token通过校验
                 if (tokenUtil.verifyToken(token)) {
                     // 校验token携带的数据
+                    // user的id,jobNum,name,role
                     String userId = JWT.decode(token).getAudience().get(0);
-                    String userRoles = JWT.decode(token).getAudience().get(1);
-                    String userJobNum = JWT.decode(token).getAudience().get(2);
-                    if (userId == null || userId.trim().isEmpty() || userRoles == null || userRoles.trim().isEmpty() || userJobNum == null || userJobNum.trim().isEmpty()) {
+                    String userJobNum = JWT.decode(token).getAudience().get(1);
+                    String userName = JWT.decode(token).getAudience().get(2);
+                    String userRoles = JWT.decode(token).getAudience().get(3);
+                    if (userId == null || userId.trim().isEmpty() ||
+                            userRoles == null || userRoles.trim().isEmpty() ||
+                            userJobNum == null || userJobNum.trim().isEmpty() ||
+                            userName == null || userName.trim().isEmpty()
+                            ) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
                     }
                     //检查是否有AdminToken的注解，有则检查token

@@ -3,6 +3,7 @@ package com.suse.netcenter.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.Date;
 @TableName(value = "count")
 public class Count {
 
+    @JsonIgnore
     @TableId(value = "count_id")
     private Integer countID;
 
@@ -75,6 +77,7 @@ public class Count {
     @TableField(value = "count_department")
     private Integer countDept;
 
+    @JsonIgnore
     @TableField(value = "count_update_time")
     private Date countUpdateTime;
 }

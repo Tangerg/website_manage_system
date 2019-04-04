@@ -5,11 +5,9 @@ import org.springframework.stereotype.Service;
 
 /**
  * @author Tangerg
- * @create 2019-03-27 11:08
+ * @create 2019-04-04 15:14
  */
 @Service
-public interface InformationService {
-    Msg infoAllWebsite();
-
-    Msg infoLog();
+public interface MessageService {
+    Msg queryAll();
 }

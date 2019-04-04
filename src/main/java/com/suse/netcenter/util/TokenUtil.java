@@ -34,8 +34,8 @@ public class TokenUtil {
                 .withIssuer(Issuer)
                 .withIssuedAt(now)
                 .withExpiresAt(exp)
-                // 将 user的id和role和jobNum保存到 token 里面
-                .withAudience(user.getUserId().toString(), user.getUserRoles().toString(), user.getUserJobNum().toString())
+                // 将 user的id,jobNum,name,role,保存到 token 里面
+                .withAudience(user.getUserId().toString(),user.getUserJobNum(),user.getUserName(),user.getUserRoles().toString() )
                 .sign(algorithm);
     }
 

@@ -22,7 +22,7 @@ public class User {
 
     @NotNull(message = "工号不能为空")
     @TableField(value = "user_job_num")
-    private Integer userJobNum;
+    private String userJobNum;
 
 
     @NotBlank(message = "用户名不能为空")

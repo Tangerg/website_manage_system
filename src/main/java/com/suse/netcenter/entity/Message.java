@@ -18,10 +18,10 @@ public class Message {
     private Integer mesId;
 
     @TableField(value = "message_sender")
-    private Integer mesSender;
+    private String mesSender;
 
     @TableField(value = "message_receiver")
-    private Integer mesReceiver;
+    private String mesReceiver;
 
     @TableField(value = "message_type")
     private Integer mesType;

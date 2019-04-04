@@ -19,7 +19,7 @@ public class Log {
     private Integer logId;
 
     @TableField(value = "log_job_num")
-    private Integer logJobNum;
+    private String logJobNum;
 
     @TableField(value = "log_ip")
     private Integer logIp;

@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -31,9 +30,9 @@ public class Application {
     @TableField(value = "application_record_operate")
     private Integer appRecOperate;
 
-    @NotNull(message = "部门负责人不能为空")
+    @NotNull(message = "部门负责人工号不能为空")
     @TableField(value = "application_department_director")
-    private Integer appDeptDirector;
+    private String appDeptDirector;
 
     @NotNull(message = "办公电话不能为空")
     @TableField(value = "application_office_phone")
@@ -41,7 +40,7 @@ public class Application {
 
     @NotNull(message = "网站负责人工号不能为空")
     @TableField(value = "application_website_director_num")
-    private Integer appWebDirectorNum;
+    private String appWebDirectorNum;
 
     @TableField(value = "application_website_director_name")
     private String appWebDirectorName;

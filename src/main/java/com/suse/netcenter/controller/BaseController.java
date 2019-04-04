@@ -18,4 +18,6 @@ public class BaseController {
     UserService userService;
     @Autowired
     WebsiteService websiteService;
+    @Autowired
+    MessageService messageService;
 }

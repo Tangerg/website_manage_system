@@ -30,7 +30,7 @@ public class UserController extends BaseController {
     }
 
     /*用户查询*/
-    @ApiOperation("查询用户")
+    @ApiOperation("查询用户基本信息")
     @UserLoginToken
     @AdminToken
     @GetMapping("/query")
@@ -43,15 +43,15 @@ public class UserController extends BaseController {
     @ApiOperation("单用户查询")
     @UserLoginToken
     @GetMapping("/query/{id}")
-    public Msg userQuery(@PathVariable("id") Integer id,@RequestHeader String token) {
-        return userService.userQuery(id,token);
+    public Msg userQuery(@PathVariable("id") Integer id, @RequestHeader String token) {
+        return userService.userQuery(id, token);
     }
 
     /*用户修改*/
     @ApiOperation("修改用户信息")
     @UserLoginToken
     @PostMapping("/update/{id}")
-    public Msg userUpdate(@PathVariable("id") Integer id, @RequestBody User user,@RequestHeader String token) {
+    public Msg userUpdate(@PathVariable("id") Integer id, @RequestBody User user, @RequestHeader String token) {
         return userService.userUpdate(id, user, token);
     }
 

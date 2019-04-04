@@ -25,7 +25,7 @@ public class Department {
 
     @NotNull(message = "部门负责人工号不能为空")
     @TableField(value = "department_director")
-    private Integer deptDirector;
+    private String deptDirector;
 
     @NotBlank(message = "部门办公电话不能为空")
     @TableField(value = "department_office_phone")

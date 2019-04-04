@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -21,7 +22,7 @@ public class Website {
     private Integer WebsiteDeptId;
 
     @TableField(value = "website_director_num")
-    private Integer WebsiteDirectorNum;
+    private String WebsiteDirectorNum;
 
     @TableField(value = "website_name")
     private String WebsiteName;
@@ -38,11 +39,23 @@ public class Website {
     @TableField(value = "website_service_content")
     private String WebsiteServiceContent;
 
-    @TableField(value = "website_space")
-    private String WebsiteSpace;
+    @TableField(value = "website_space_type")
+    private Integer appWebsiteSpaceType;
 
-    @TableField(value = "website_port")
-    private String WebsitePort;
+    @TableField(value = "website_space_campus")
+    private String appWebsiteSpaceCampus;
+
+    @TableField(value = "website_space_building")
+    private String appWebsiteSpaceBuilding;
+
+    @TableField(value = "website_space_room")
+    private String appWebsiteSpaceRoom;
+
+    @TableField(value = "website_port_in")
+    private Integer appWebsiteInPort;
+
+    @TableField(value = "website_port_out")
+    private Integer appWebsiteOutPort;
 
     @TableField(value = "website_type")
     private String WebsiteType;

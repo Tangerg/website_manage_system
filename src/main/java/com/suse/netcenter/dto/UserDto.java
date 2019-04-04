@@ -12,8 +12,9 @@ import javax.validation.constraints.NotNull;
  */
 @Data
 public class UserDto {
-    @NotNull(message = "账号不能为空")
-    private Integer userJobNum;
+
+    @NotBlank(message = "工号不能为空")
+    private String userJobNum;
     @NotBlank(message = "密码不能为空")
     private String userPassword;
 }

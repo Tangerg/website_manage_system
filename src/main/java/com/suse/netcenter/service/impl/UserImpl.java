@@ -5,16 +5,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
-import com.suse.netcenter.dto.PageDto;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.User;
 import com.suse.netcenter.mapper.UserMapper;
 import com.suse.netcenter.service.UserService;
+import com.suse.netcenter.util.PageUtil;
 import com.suse.netcenter.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,23 +27,23 @@ public class UserImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
+    MessageImpl message=new MessageImpl();
+
     @Override
     public Msg userLogin(UserDto userDto) {
-        User user = new User();
-        try {
-            user = userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", userDto.getUserJobNum()));
-            if (user == null) {
-                return Msg.fail().addMsg("该用户不存在");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("该用户不存在");
+        User user = selectUser(userDto.getUserJobNum());
+        if (user == null) {
+            return Msg.fail().addMsg("该用户不存在");
         }
         if (!userDto.getUserPassword().equals(user.getUserPassword())) {
             return Msg.fail().addMsg("密码错误");
         }
-        TokenUtil tokenUtil = new TokenUtil();
-        String token = tokenUtil.createToken(user);
-        return Msg.success().addData("user", user).addData("token", token);
+        Integer UnreadMsg = message.selectCountUnreadMsgByJobNum(userDto.getUserJobNum());
+        String token = new TokenUtil().createToken(user);
+        return Msg.success()
+                .addData("user", user)
+                .addData("unread", UnreadMsg)
+                .addData("token", token);
     }
 
     @Override
@@ -96,21 +97,10 @@ public class UserImpl implements UserService {
 
     @Override
     public Msg userQueryAll(Integer pageNum, Integer pageSize) {
-        Page<User> page = new Page<>(pageNum, pageSize);
-        try {
-            IPage<User> userIPage = userMapper.selectPage(page, new QueryWrapper<User>()
-                    .eq("user_is_quit", 0));
-            PageDto pageDto = new PageDto();
-            pageDto.setCurrent(userIPage.getCurrent());
-            pageDto.setPages(userIPage.getPages());
-            pageDto.setSize(userIPage.getSize());
-            pageDto.setTotal(userIPage.getTotal());
-            return Msg.success()
-                    .addData("pageInfo", pageDto)
-                    .addData("userList", userIPage.getRecords());
-        }catch (Exception e){
-            throw new RuntimeException("查询失败");
-        }
+        IPage userIPage = selectUserByPage(pageNum, pageSize);
+        return Msg.success()
+                .addData("pageInfo", new PageUtil().createPageDto(userIPage))
+                .addData("userList", userIPage.getRecords());
     }
 
     @Override
@@ -135,5 +125,38 @@ public class UserImpl implements UserService {
         if (!CollectionUtils.isEmpty(list)) {
             list.forEach(System.out::println);
         }
+    }
+
+    /*由工号查询用户*/
+    User selectUser(String jobNum) {
+        User user = null;
+        try {
+            user = userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
+        } catch (Exception e) {
+            throw new RuntimeException("用户查询失败");
+        }
+        return user;
+    }
+
+    List selectUserList(List<String> stringList) {
+        List userList = new ArrayList();
+        try {
+            userList = userMapper.selectList(new QueryWrapper<User>().in("user_job_num", stringList));
+        } catch (Exception e) {
+            throw new RuntimeException("用户查询失败");
+        }
+        return userList;
+    }
+
+    private IPage selectUserByPage(Integer pageNum, Integer pageSize) {
+        Page<User> page = new Page<>(pageNum, pageSize);
+        IPage<User> userIPage;
+        try {
+            userIPage = userMapper.selectPage(page, new QueryWrapper<User>()
+                    .eq("user_is_quit", 0));
+        } catch (Exception e) {
+            throw new RuntimeException("查询失败");
+        }
+        return userIPage;
     }
 }

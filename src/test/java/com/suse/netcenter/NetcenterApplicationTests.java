@@ -2,6 +2,7 @@ package com.suse.netcenter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
@@ -21,20 +22,21 @@ import java.util.List;
 @SpringBootTest
 public class NetcenterApplicationTests {
     @Autowired
-    private ApplicationMapper applicationMapper;
+    ApplicationMapper applicationMapper;
     @Autowired
-    private CountMapper countMapper;
+    CountMapper countMapper;
     @Autowired
-    private DepartmentMapper departmentMapper;
+    DepartmentMapper departmentMapper;
     @Autowired
-    private LogMapper logMapper;
+    LogMapper logMapper;
     @Autowired
-    private MessageMapper messageMapper;
+    NoticeMapper messageMapper;
     @Autowired
-    private UserMapper userMapper;
+    UserMapper userMapper;
     @Autowired
-    private WebsiteMapper websiteMapper;
-
+    WebsiteMapper websiteMapper;
+    @Autowired
+    NoticeMapper noticeMapper;
 
     @Test
     public void testSelectApplication() {
@@ -101,7 +103,7 @@ public class NetcenterApplicationTests {
         User user = new User();
         user.setUserId(0001);
         user.setUserRoles(1);
-        user.setUserJobNum(0001);
+        user.setUserJobNum("0001");
         TokenUtil tu = new TokenUtil();
         String token = tu.createToken(user);
         System.out.println(token);
@@ -123,6 +125,10 @@ public class NetcenterApplicationTests {
         System.out.println("当前每页显示数 ------> " + userIPage.getSize());
         print(userIPage.getRecords());
         System.out.println("----- baseMapper 自带分页 ------");
+    }
+    @Test
+    public void messageTest(){
+        noticeMapper.selectCount(null);
     }
     private <T> void print(List<T> list) {
         if (!CollectionUtils.isEmpty(list)) {

@@ -1,5 +1,6 @@
 package com.suse.netcenter.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
@@ -9,6 +10,8 @@ import com.suse.netcenter.mapper.WebsiteMapper;
 import com.suse.netcenter.service.WebsiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * @author Tangerg
@@ -68,5 +71,15 @@ public class WebsiteImpl implements WebsiteService {
             }
         }
         return Msg.fail().addMsg("更新失败");
+    }
+
+    List selectWebsiteByJobNum(String JobNum){
+        List<Website> website = null;
+        try {
+            website=websiteMapper.selectList(new QueryWrapper<Website>().eq("website_director_num",JobNum));
+        }catch (Exception e){
+            throw new RuntimeException("查询失败");
+        }
+        return website;
     }
 }
