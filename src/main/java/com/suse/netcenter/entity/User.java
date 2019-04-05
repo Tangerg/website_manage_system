@@ -45,6 +45,7 @@ public class User {
     @TableField(value = "user_tel")
     private String userTel;
 
+    @JsonIgnore
     @TableField(value = "user_is_quit")
     private Integer userIsQuit;
 

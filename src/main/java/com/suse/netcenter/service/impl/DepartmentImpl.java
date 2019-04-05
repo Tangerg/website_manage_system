@@ -85,4 +85,13 @@ public class DepartmentImpl implements DepartmentService {
 
         return Msg.success().addMsg("删除部门成功");
     }
+    Department selectDeptById(Integer id){
+        Department department = null;
+        try {
+            department = departmentMapper.selectById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("查询失败");
+        }
+        return department;
+    }
 }

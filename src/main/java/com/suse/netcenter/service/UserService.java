@@ -15,11 +15,11 @@ public interface UserService {
 
     Msg userAdd(User user);
 
-    Msg userDelete(Integer id);
+    Msg userDelete(String JobNum);
 
-    Msg userUpdate(Integer id,User user,String token);
+    Msg userUpdate(String JobNum,User user,String token);
 
     Msg userQueryAll(Integer pageNum, Integer pageSize);
 
-    Msg userQuery(Integer id,String token);
+    Msg userQuery(String JobNum,String token);
 }

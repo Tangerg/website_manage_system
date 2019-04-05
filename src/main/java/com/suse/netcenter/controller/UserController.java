@@ -40,19 +40,19 @@ public class UserController extends BaseController {
     }
 
     /*单个用户查询*/
-    @ApiOperation("单用户查询")
+    @ApiOperation("单用户查询详细信息")
     @UserLoginToken
-    @GetMapping("/query/{id}")
-    public Msg userQuery(@PathVariable("id") Integer id, @RequestHeader String token) {
-        return userService.userQuery(id, token);
+    @GetMapping("/query/{JobNum}")
+    public Msg userQuery(@PathVariable("JobNum") String JobNum, @RequestHeader String token) {
+        return userService.userQuery(JobNum, token);
     }
 
     /*用户修改*/
     @ApiOperation("修改用户信息")
     @UserLoginToken
-    @PostMapping("/update/{id}")
-    public Msg userUpdate(@PathVariable("id") Integer id, @RequestBody User user, @RequestHeader String token) {
-        return userService.userUpdate(id, user, token);
+    @PostMapping("/update/{JobNum}")
+    public Msg userUpdate(@PathVariable("JobNum") String JobNum, @RequestBody User user, @RequestHeader String token) {
+        return userService.userUpdate(JobNum, user, token);
     }
 
     /*用户新增*/
@@ -68,8 +68,8 @@ public class UserController extends BaseController {
     @ApiOperation("删除用户")
     @UserLoginToken
     @AdminToken
-    @PostMapping("/delete/{id}")
-    public Msg userDelete(@PathVariable("id") Integer id) {
-        return userService.userDelete(id);
+    @PostMapping("/delete/{JobNum}")
+    public Msg userDelete(@PathVariable("JobNum") String JobNum) {
+        return userService.userDelete(JobNum);
     }
 }

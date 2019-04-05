@@ -2,15 +2,19 @@ package com.suse.netcenter.service.impl;
 
 import com.auth0.jwt.JWT;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.dto.UserDto;
+import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
+import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.UserMapper;
 import com.suse.netcenter.service.UserService;
 import com.suse.netcenter.util.PageUtil;
 import com.suse.netcenter.util.TokenUtil;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -25,76 +29,89 @@ import java.util.List;
 @Service
 public class UserImpl implements UserService {
     @Autowired
-    UserMapper userMapper;
+    private UserMapper userMapper;
+    @Autowired
+    private MessageImpl messageImp;
+    @Autowired
+    private DepartmentImpl departmentImp;
+    @Autowired
+    private WebsiteImpl websiteImp;
 
-    MessageImpl message=new MessageImpl();
-
+    /*用户登陆
+     *   登陆后返回个人信息
+     *   登陆后返回token
+     *   登陆后返回未读消息总数
+     */
     @Override
     public Msg userLogin(UserDto userDto) {
-        User user = selectUser(userDto.getUserJobNum());
+        User user = selectUserByJobNum(userDto.getUserJobNum());
         if (user == null) {
             return Msg.fail().addMsg("该用户不存在");
         }
         if (!userDto.getUserPassword().equals(user.getUserPassword())) {
             return Msg.fail().addMsg("密码错误");
         }
-        Integer UnreadMsg = message.selectCountUnreadMsgByJobNum(userDto.getUserJobNum());
+        Department department = departmentImp.selectDeptById(user.getUserDeptId());
+        List websiteList = websiteImp.selectWebsiteByJobNum(userDto.getUserJobNum());
+        Integer UnreadMsg = messageImp.selectCountUnreadMsgByJobNum(userDto.getUserJobNum());
         String token = new TokenUtil().createToken(user);
         return Msg.success()
                 .addData("user", user)
                 .addData("unread", UnreadMsg)
+                .addData("dept", department)
+                .addData("websiteList", websiteList)
                 .addData("token", token);
     }
-
+    /*新增用户
+     *  新增基本信息
+     */
     @Override
     public Msg userAdd(User user) {
-        user.setUserId(0);
-        try {
-            userMapper.insert(user);
-        } catch (Exception e) {
-            throw new RuntimeException("用户添加失败");
+        if (addUser(user)) {
+            return Msg.success().addMsg("添加成功");
         }
-        return Msg.success().addMsg("用户添加成功");
+        return Msg.fail().addMsg("添加失败");
     }
 
+    /*
+    * 删除用户
+    *   该用户的is_quit设置为1
+    */
     @Override
-    public Msg userDelete(Integer id) {
-        User user = new User();
-        try {
-            user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", id));
-            if (user == null || user.getUserIsQuit().equals(1)) {
-                return Msg.fail().addMsg("该用户不存在");
-            }
-            user.setUserIsQuit(1);
-            userMapper.updateById(user);
-        } catch (Exception e) {
-            throw new RuntimeException("删除用户失败");
+    public Msg userDelete(String JobNum) {
+        User user = selectUserByJobNum(JobNum);
+        if (user == null) {
+            return Msg.fail().addMsg("该用户不存在");
         }
-        return Msg.success().addMsg("删除用户成功");
+        if (deleteUserById(user)) {
+            return Msg.success().addMsg("删除成功");
+        }
+        return Msg.fail().addMsg("删除失败");
     }
-
+    /*修改用户
+     *  修改基本信息
+     *  自己或者管理员修改
+     */
     @Override
-    public Msg userUpdate(Integer id, User user, String token) {
+    public Msg userUpdate(String JobNum, User user, String token) {
         String userId = JWT.decode(token).getAudience().get(0);
-        String userRoles = JWT.decode(token).getAudience().get(1);
-        if (id.equals(user.getUserId()) && (user.getUserId().toString().equals(userId) || userRoles.equals("1"))) {
-
-            try {
-                User user1 = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", id));
-                if (user1 == null || user1.getUserIsQuit().equals(1)) {
-                    return Msg.fail().addMsg("该用户不存在");
-                }
-                if (userMapper.updateById(user) == 0) {
-                    return Msg.success().addMsg("用户信息更新失败");
-                }
-                return Msg.success().addMsg("用户信息更新成功");
-            } catch (Exception e) {
-                throw new RuntimeException("用户信息更新失败");
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        String userRoles = JWT.decode(token).getAudience().get(3);
+        //如果传入的参数能够和token中的对应或者权限为管理员
+        if ((JobNum.equals(userJobNum) && userId.equals(user.getUserId().toString()) && JobNum.equals(user.getUserJobNum())) || userRoles.equals("1")) {
+            if (updateUserByIdAndJobNum(user)) {
+                return Msg.success().addMsg("更新成功");
             }
+            return Msg.fail().addMsg("更新失败");
         }
         return Msg.fail().addMsg("你没有权限");
     }
 
+    /*
+     * 查询所有用户
+     *   传入分页条件查询用户基本信息
+     *
+     */
     @Override
     public Msg userQueryAll(Integer pageNum, Integer pageSize) {
         IPage userIPage = selectUserByPage(pageNum, pageSize);
@@ -103,32 +120,39 @@ public class UserImpl implements UserService {
                 .addData("userList", userIPage.getRecords());
     }
 
+    /*
+     * 查询单用户
+     *   传入用户工号查询用户基本信息
+     *   查询该用户所在部门
+     *   查询该用户拥有的网站
+     */
     @Override
-    public Msg userQuery(Integer id, String token) {
-        String userId = JWT.decode(token).getAudience().get(0);
-        String userRoles = JWT.decode(token).getAudience().get(1);
-        if ((id.toString().equals(userId)) || userRoles.equals("1")) {
-            try {
-                User user = userMapper.selectOne(new QueryWrapper<User>().eq("user_id", id));
-                if (user == null || user.getUserIsQuit().equals(1)) {
-                    return Msg.fail().addMsg("该用户不存在");
-                }
-                return Msg.success().addData("userInfo", user);
-            } catch (Exception e) {
-                throw new RuntimeException("查询失败");
+    public Msg userQuery(String JobNum, String token) {
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        String userRoles = JWT.decode(token).getAudience().get(3);
+        //传入的工号等于token中的工号或者权限为管理员
+        if (userJobNum.equals(JobNum) || userRoles.equals("1")) {
+            User user = selectUserByJobNum(JobNum);
+            if (user == null) {
+                return Msg.fail().addMsg("该用户不存在");
             }
+            Department department = departmentImp.selectDeptById(user.getUserDeptId());
+            List websiteList = websiteImp.selectWebsiteByJobNum(userJobNum);
+            return Msg.success()
+                    .addData("user", user)
+                    .addData("dept", department)
+                    .addData("websiteList", websiteList);
         }
         return Msg.fail().addMsg("你没有权限");
     }
 
-    private <T> void print(List<T> list) {
-        if (!CollectionUtils.isEmpty(list)) {
-            list.forEach(System.out::println);
-        }
-    }
 
-    /*由工号查询用户*/
-    User selectUser(String jobNum) {
+
+
+
+
+    /*由工号查询用户（未离职）*/
+    User selectUserByJobNum(String jobNum) {
         User user = null;
         try {
             user = userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
@@ -138,14 +162,54 @@ public class UserImpl implements UserService {
         return user;
     }
 
+    /*由id查询用户*/
+    User selectUserById(String id) {
+        User user = null;
+        try {
+            user = userMapper.selectById(id);
+        } catch (Exception e) {
+            throw new RuntimeException("用户查询失败");
+        }
+        return user;
+    }
+
     List selectUserList(List<String> stringList) {
         List userList = new ArrayList();
         try {
-            userList = userMapper.selectList(new QueryWrapper<User>().in("user_job_num", stringList));
+            userList = userMapper.selectList(new QueryWrapper<User>().in("user_job_num", stringList).eq("user_is_quit", 0));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
         return userList;
+    }
+
+    boolean updateUserByIdAndJobNum(User user) {
+        boolean flag = false;
+        try {
+            int update = userMapper.update(user, new UpdateWrapper<User>()
+                    .eq("user_id", user.getUserId())
+                    .eq("user_job_num", user.getUserJobNum()));
+            if (update != 0) {
+                flag = true;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("更新失败");
+        }
+        return flag;
+    }
+
+    boolean deleteUserById(User user) {
+        boolean flag = false;
+        user.setUserIsQuit(1);
+        try {
+            int update = userMapper.updateById(user);
+            if (update != 0) {
+                flag = true;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("更新失败");
+        }
+        return flag;
     }
 
     private IPage selectUserByPage(Integer pageNum, Integer pageSize) {
@@ -158,5 +222,18 @@ public class UserImpl implements UserService {
             throw new RuntimeException("查询失败");
         }
         return userIPage;
+    }
+
+    boolean addUser(User user) {
+        boolean flag = false;
+        user.setUserId(0);
+        try {
+            if (userMapper.insert(user) != 0) {
+                flag = true;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("添加失败");
+        }
+        return flag;
     }
 }
