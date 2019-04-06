@@ -91,4 +91,16 @@ public class WebsiteImpl implements WebsiteService {
         }
         return website;
     }
+
+    boolean addWebsiteByApplication(Website website){
+        boolean flag= false;
+        try{
+            if(websiteMapper.insert(website)!=0){
+                flag = true;
+            }
+        }catch (Exception e){
+            throw new RuntimeException("操作失败");
+        }
+        return flag;
+    }
 }

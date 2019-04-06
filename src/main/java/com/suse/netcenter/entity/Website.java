@@ -40,22 +40,22 @@ public class Website {
     private String WebsiteServiceContent;
 
     @TableField(value = "website_space_type")
-    private Integer appWebsiteSpaceType;
+    private Integer WebsiteSpaceType;
 
     @TableField(value = "website_space_campus")
-    private String appWebsiteSpaceCampus;
+    private String WebsiteSpaceCampus;
 
     @TableField(value = "website_space_building")
-    private String appWebsiteSpaceBuilding;
+    private String WebsiteSpaceBuilding;
 
     @TableField(value = "website_space_room")
-    private String appWebsiteSpaceRoom;
+    private String WebsiteSpaceRoom;
 
     @TableField(value = "website_port_in")
-    private Integer appWebsiteInPort;
+    private Integer WebsiteInPort;
 
     @TableField(value = "website_port_out")
-    private Integer appWebsiteOutPort;
+    private Integer WebsiteOutPort;
 
     @TableField(value = "website_type")
     private String WebsiteType;

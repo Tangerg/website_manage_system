@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface ApplicationService {
-    Msg ApplicationAdd(Application application);
-    Msg ApplicationQueryAll(String condition);
-    Msg ApplicationQuery(Integer id,String token);
-    Msg ApplicationSubmit(Integer id,Application application,String token);
-    Msg ApplicationUpdate(Integer id,Application application,String token);
+    Msg ApplicationQueryAll(String condition,Integer pageNum,Integer pageSize);
+    Msg ApplicationSubmit(Application application,String token);
     Msg ApplicationReview(Integer id,Application application);
+    Msg ApplicationQuery(String JobNum, String token);
 }
