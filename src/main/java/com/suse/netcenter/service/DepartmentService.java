@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface DepartmentService {
-    Msg deptQueryAll(Integer pageNum, Integer pageSize);
+    Msg deptQueryByPage(Integer pageNum, Integer pageSize);
+    Msg deptQueryAll();
     Msg deptQuery(Integer id);
     Msg deptAdd(Department department);
     Msg deptUpdate(Integer id,Department department);

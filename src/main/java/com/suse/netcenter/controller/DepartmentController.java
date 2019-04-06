@@ -24,33 +24,43 @@ public class DepartmentController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/add")
-    public Msg deptAdd(@Valid @RequestBody Department department){
+    public Msg deptAdd(@Valid @RequestBody Department department) {
         return departmentService.deptAdd(department);
     }
+
     //删除部门
     @ApiOperation("删除部门")
     @UserLoginToken
     @AdminToken
     @PostMapping("/delete/{id}")
-    public Msg deptDelete(@PathVariable("id") Integer id){
+    public Msg deptDelete(@PathVariable("id") Integer id) {
         return departmentService.deptDelete(id);
     }
+
     //修改部门
     @ApiOperation("修改部门")
     @UserLoginToken
     @AdminToken
     @PostMapping("/update/{id}")
-    public Msg deptUpdate(@PathVariable("id") Integer id,@RequestBody Department department){
-        return departmentService.deptUpdate(id,department);
+    public Msg deptUpdate(@PathVariable("id") Integer id, @RequestBody Department department) {
+        return departmentService.deptUpdate(id, department);
+    }
+
+    //查询所有部门(分页)
+    @ApiOperation("分页查询所有部门")
+    @UserLoginToken
+    @GetMapping("/query/page")
+    public Msg deptQueryByPage(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                               @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return departmentService.deptQueryByPage(pageNum, pageSize);
     }
 
     //查询所有部门
     @ApiOperation("查询所有部门")
     @UserLoginToken
     @GetMapping("/query")
-    public Msg deptQueryAll(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
-                            @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize){
-        return departmentService.deptQueryAll(pageNum,pageSize);
+    public Msg deptQueryAll() {
+        return departmentService.deptQueryAll();
     }
 
     //由部门id查看部门详情
@@ -58,7 +68,7 @@ public class DepartmentController extends BaseController {
     @UserLoginToken
     @AdminToken
     @GetMapping("/query/{id}")
-    public Msg deptQuery(@PathVariable("id") Integer id){
+    public Msg deptQuery(@PathVariable("id") Integer id) {
         return departmentService.deptQuery(id);
     }
 

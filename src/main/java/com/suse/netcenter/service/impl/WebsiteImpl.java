@@ -74,9 +74,18 @@ public class WebsiteImpl implements WebsiteService {
     }
 
     List selectWebsiteByJobNum(String JobNum){
-        List<Website> website = null;
+        List<Website> website;
         try {
             website=websiteMapper.selectList(new QueryWrapper<Website>().eq("website_director_num",JobNum));
+        }catch (Exception e){
+            throw new RuntimeException("查询失败");
+        }
+        return website;
+    }
+    List<Website> selectWebsiteByDept(Integer id){
+        List<Website> website;
+        try {
+            website=websiteMapper.selectList(new QueryWrapper<Website>().eq("website_department_id",id));
         }catch (Exception e){
             throw new RuntimeException("查询失败");
         }

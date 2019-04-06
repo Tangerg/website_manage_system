@@ -9,15 +9,12 @@ import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
-import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.UserMapper;
 import com.suse.netcenter.service.UserService;
 import com.suse.netcenter.util.PageUtil;
 import com.suse.netcenter.util.TokenUtil;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +59,7 @@ public class UserImpl implements UserService {
                 .addData("websiteList", websiteList)
                 .addData("token", token);
     }
+
     /*新增用户
      *  新增基本信息
      */
@@ -74,9 +72,9 @@ public class UserImpl implements UserService {
     }
 
     /*
-    * 删除用户
-    *   该用户的is_quit设置为1
-    */
+     * 删除用户
+     *   该用户的is_quit设置为1
+     */
     @Override
     public Msg userDelete(String JobNum) {
         User user = selectUserByJobNum(JobNum);
@@ -88,6 +86,7 @@ public class UserImpl implements UserService {
         }
         return Msg.fail().addMsg("删除失败");
     }
+
     /*修改用户
      *  修改基本信息
      *  自己或者管理员修改
@@ -147,13 +146,9 @@ public class UserImpl implements UserService {
     }
 
 
-
-
-
-
     /*由工号查询用户（未离职）*/
     User selectUserByJobNum(String jobNum) {
-        User user = null;
+        User user;
         try {
             user = userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
         } catch (Exception e) {
@@ -164,7 +159,7 @@ public class UserImpl implements UserService {
 
     /*由id查询用户*/
     User selectUserById(String id) {
-        User user = null;
+        User user;
         try {
             user = userMapper.selectById(id);
         } catch (Exception e) {
@@ -173,10 +168,12 @@ public class UserImpl implements UserService {
         return user;
     }
 
-    List selectUserList(List<String> stringList) {
-        List userList = new ArrayList();
+    List<User> selectUserListByDept(Integer id) {
+        List<User> userList;
         try {
-            userList = userMapper.selectList(new QueryWrapper<User>().in("user_job_num", stringList).eq("user_is_quit", 0));
+            userList = userMapper.selectList(new QueryWrapper<User>()
+                    .eq("user_department_id", id)
+                    .eq("user_is_quit", 0));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
@@ -198,7 +195,7 @@ public class UserImpl implements UserService {
         return flag;
     }
 
-    boolean deleteUserById(User user) {
+    private boolean deleteUserById(User user) {
         boolean flag = false;
         user.setUserIsQuit(1);
         try {
@@ -224,7 +221,7 @@ public class UserImpl implements UserService {
         return userIPage;
     }
 
-    boolean addUser(User user) {
+    private boolean addUser(User user) {
         boolean flag = false;
         user.setUserId(0);
         try {
