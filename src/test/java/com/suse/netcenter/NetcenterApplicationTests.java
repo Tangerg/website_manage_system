@@ -2,6 +2,8 @@ package com.suse.netcenter;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.suse.netcenter.service.impl.InformationImpl;
+import com.suse.netcenter.service.impl.WebsiteImpl;
 import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -37,6 +39,10 @@ public class NetcenterApplicationTests {
     WebsiteMapper websiteMapper;
     @Autowired
     NoticeMapper noticeMapper;
+    @Autowired
+    WebsiteImpl websiteImpl;
+    @Autowired
+    InformationImpl informationImpl;
 
     @Test
     public void testSelectApplication() {
@@ -101,7 +107,7 @@ public class NetcenterApplicationTests {
     @Test
     public void getToken(){
         User user = new User();
-        user.setUserId(0001);
+        user.setUserId(1);
         user.setUserRoles(1);
         user.setUserJobNum("0001");
         TokenUtil tu = new TokenUtil();
@@ -130,10 +136,24 @@ public class NetcenterApplicationTests {
     public void messageTest(){
         noticeMapper.selectCount(null);
     }
+
+    @Test
+    public void selectByConTest(){
+        int count = websiteImpl.countWebsiteByCondition("website_type",2,true);
+        System.out.println(count);
+    }
+
+    @Test
+    public void infoWebsiteTest(){
+        Msg count = informationImpl.infoAllWebsite();
+        System.out.println(count);
+    }
+
     private <T> void print(List<T> list) {
         if (!CollectionUtils.isEmpty(list)) {
             list.forEach(System.out::println);
         }
     }
+
 
 }

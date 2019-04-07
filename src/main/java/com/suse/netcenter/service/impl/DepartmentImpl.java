@@ -49,10 +49,12 @@ public class DepartmentImpl implements DepartmentService {
     public Msg deptQuery(Integer id) {
         Department department = selectDeptById(id);
         if (department != null) {
+            User director = userImpl.selectUserByJobNum(department.getDeptDirector());
             List<User> userList = userImpl.selectUserListByDept(id);
             List<Website> websiteList = websiteImpl.selectWebsiteByDept(id);
             return Msg.success()
                     .addData("deptInfo", department)
+                    .addData("director",director)
                     .addData("userList", userList)
                     .addData("websiteList", websiteList);
         }
@@ -158,5 +160,14 @@ public class DepartmentImpl implements DepartmentService {
             throw new RuntimeException("查询失败");
         }
         return deptList;
+    }
+    Integer countDept(){
+        Integer count = 0;
+        try {
+            count = departmentMapper.selectCount(null);
+        }catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+        return count;
     }
 }

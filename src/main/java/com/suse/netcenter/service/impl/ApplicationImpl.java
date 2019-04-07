@@ -76,12 +76,14 @@ public class ApplicationImpl implements ApplicationService {
 
     @Override
     public Msg ApplicationReview(Integer id, Application application) {
-        if (id.equals(application.getAppId())) {
+        if (id.equals(application.getAppId()) && !application.getAppState().equals(20)) {
             if (updateApplicationById(application)) {
-                if (websiteImpl.addWebsiteByApplication(Application2Website(application))) {
-                    return Msg.success().addMsg("操作成功");
+                if (application.getAppState().equals(40)) {
+                    if (websiteImpl.addWebsiteByApplication(Application2Website(application))) {
+                        return Msg.success().addMsg("操作成功");
+                    }
                 }
-                return Msg.fail().addMsg("操作失败");
+                return Msg.success().addMsg("操作成功");
             }
             return Msg.fail().addMsg("操作失败");
         }

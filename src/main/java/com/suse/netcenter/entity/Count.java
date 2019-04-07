@@ -1,9 +1,5 @@
 package com.suse.netcenter.entity;
 
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import java.util.Date;
@@ -13,71 +9,46 @@ import java.util.Date;
  * @create 2019-03-25 20:09
  */
 @Data
-@TableName(value = "count")
 public class Count {
 
-    @JsonIgnore
-    @TableId(value = "count_id")
-    private Integer countID;
+    private Integer website;
 
-    @TableField(value = "count_website")
-    private Integer countWebsite;
+    private Integer department;
 
-    @TableField(value = "count_lan_html")
-    private Integer countLanHtml;
+    private Integer lanHtml;
 
-    @TableField(value = "count_lan_php")
-    private Integer countLanPhp;
+    private Integer lanPhp;
 
-    @TableField(value = "count_lan_asp")
-    private Integer countLanAsp;
+    private Integer lanAsp;
 
-    @TableField(value = "count_lan_jsp")
-    private Integer countLanJsp;
+    private Integer lanJsp;
 
-    @TableField(value = "count_lan_other")
-    private Integer countLanOther;
+    private Integer lanOther;
 
-    @TableField(value = "count_db_no")
-    private Integer countDBNo;
+    private Integer dbNo;
 
-    @TableField(value = "count_db_mysql")
-    private Integer countDBMysql;
+    private Integer dbMysql;
 
-    @TableField(value = "count_db_access")
-    private Integer countDBAccess;
+    private Integer dbAccess;
 
-    @TableField(value = "count_db_mssql")
-        private Integer countDBMSSql;
+    private Integer dbMSSql;
 
-    @TableField(value = "count_db_oracle")
-    private Integer countDBOracle;
+    private Integer dbOracle;
 
-    @TableField(value = "count_db_other")
-    private Integer countDBOther;
+    private Integer dbOther;
 
-    @TableField(value = "count_bug_sql")
-    private Integer countBugSql;
+    private Integer bugCount;
 
-    @TableField(value = "count_bug_xss")
-    private Integer countBugXss;
+    private Integer bugSql;
 
-    @TableField(value = "count_bug_csrf")
-    private Integer countBugCsrf;
+    private Integer bugXss;
 
-    @TableField(value = "count_bug_file_upload")
-    private Integer countBugFileUp;
+    private Integer bugCsrf;
 
-    @TableField(value = "count_bug_jurisdiction")
-    private Integer countBugJurisdiction;
+    private Integer bugFileUpload;
 
-    @TableField(value = "count_bug_other")
-    private Integer countBugOther;
+    private Integer bugJurisdiction;
 
-    @TableField(value = "count_department")
-    private Integer countDept;
+    private Integer bugOther;
 
-    @JsonIgnore
-    @TableField(value = "count_update_time")
-    private Date countUpdateTime;
 }

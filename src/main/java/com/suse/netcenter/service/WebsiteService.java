@@ -11,6 +11,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface WebsiteService {
     Msg queryWebsiteAll(Integer pageNum,Integer pageSize);
-    Msg queryWebsite(Integer id);
     Msg updateWebsite(Integer id, Website website);
 }

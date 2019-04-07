@@ -26,15 +26,6 @@ public class InformationController extends BaseController {
     public Msg infoAllWebsite() {
         return informationService.infoAllWebsite();
     }
-    /*查看统计信息*//*
-    @ApiOperation("统计网站总数，部门总数")
-    @UserLoginToken
-    @AdminToken
-    @GetMapping("/count")
-    public Msg infoCount() {
-        return null;
-    }
-*/
     /*查看日志信息*/
     @UserLoginToken
     @AdminToken
