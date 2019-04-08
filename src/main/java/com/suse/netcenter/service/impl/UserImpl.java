@@ -16,7 +16,6 @@ import com.suse.netcenter.util.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -148,89 +147,67 @@ public class UserImpl implements UserService {
 
     /*由工号查询用户（未离职）*/
     User selectUserByJobNum(String jobNum) {
-        User user;
         try {
-            user = userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
+            return userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
-        return user;
     }
 
     /*由id查询用户*/
-    User selectUserById(String id) {
-        User user;
+    /*User selectUserById(String id) {
         try {
-            user = userMapper.selectById(id);
+            return userMapper.selectById(id);
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
-        return user;
-    }
+    }*/
 
     List<User> selectUserListByDept(Integer id) {
-        List<User> userList;
         try {
-            userList = userMapper.selectList(new QueryWrapper<User>()
+            return userMapper.selectList(new QueryWrapper<User>()
                     .eq("user_department_id", id)
                     .eq("user_is_quit", 0));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
-        return userList;
     }
 
     boolean updateUserByIdAndJobNum(User user) {
-        boolean flag = false;
         try {
-            int update = userMapper.update(user, new UpdateWrapper<User>()
+            return (userMapper.update(user, new UpdateWrapper<User>()
                     .eq("user_id", user.getUserId())
-                    .eq("user_job_num", user.getUserJobNum()));
-            if (update != 0) {
-                flag = true;
-            }
+                    .eq("user_job_num", user.getUserJobNum())) != 0);
         } catch (Exception e) {
             throw new RuntimeException("更新失败");
         }
-        return flag;
     }
 
     private boolean deleteUserById(User user) {
-        boolean flag = false;
         user.setUserIsQuit(1);
         try {
-            int update = userMapper.updateById(user);
-            if (update != 0) {
-                flag = true;
-            }
+            return (userMapper.updateById(user) != 0);
         } catch (Exception e) {
             throw new RuntimeException("更新失败");
         }
-        return flag;
     }
 
-    private IPage selectUserByPage(Integer pageNum, Integer pageSize) {
+    private IPage<User> selectUserByPage(Integer pageNum, Integer pageSize) {
         Page<User> page = new Page<>(pageNum, pageSize);
-        IPage<User> userIPage;
         try {
-            userIPage = userMapper.selectPage(page, new QueryWrapper<User>()
+            return userMapper.selectPage(page, new QueryWrapper<User>()
                     .eq("user_is_quit", 0));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
-        return userIPage;
     }
 
     private boolean addUser(User user) {
-        boolean flag = false;
         user.setUserId(0);
         try {
-            if (userMapper.insert(user) != 0) {
-                flag = true;
-            }
+            return (userMapper.insert(user) != 0);
         } catch (Exception e) {
             throw new RuntimeException("添加失败");
         }
-        return flag;
     }
 }

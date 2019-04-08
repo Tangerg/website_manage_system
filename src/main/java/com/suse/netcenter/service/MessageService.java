@@ -1,6 +1,7 @@
 package com.suse.netcenter.service;
 
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.entity.Message;
 import org.springframework.stereotype.Service;
 
 /**
@@ -9,5 +10,12 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public interface MessageService {
-    Msg queryAll();
+
+    Msg queryMsg(String condition, Integer pageNum, Integer pageSize, String token);
+
+    Msg sendMsg(Message message, String token);
+
+    Msg deleteMsg(Integer id, String token);
+
+    Msg readMsg(Integer id, String token);
 }

@@ -1,15 +1,16 @@
 package com.suse.netcenter.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Count;
 import com.suse.netcenter.entity.Log;
 import com.suse.netcenter.mapper.CountMapper;
 import com.suse.netcenter.mapper.LogMapper;
 import com.suse.netcenter.service.InformationService;
-import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -21,13 +22,15 @@ public class InformationImpl implements InformationService {
     @Autowired
     LogMapper logMapper;
     @Autowired
+    CountMapper countMapper;
+    @Autowired
     WebsiteImpl websiteImpl;
     @Autowired
     DepartmentImpl departmentImpl;
 
     @Override
     public Msg infoAllWebsite() {
-        return Msg.success().addData("InfoCount",infoCount());
+        return Msg.success().addData("infoCount", selectLastRecord());
     }
 
     @Override
@@ -39,48 +42,71 @@ public class InformationImpl implements InformationService {
             throw new RuntimeException("发生错误");
         }
     }
-    private Count infoCount(){
-        Integer deptCount = departmentImpl.countDept();
-        Integer websiteCount = websiteImpl.countWebsite();
-        Integer lanHtml = websiteImpl.countWebsiteByCondition("website_type", 1, false);
-        Integer lanPHP = websiteImpl.countWebsiteByCondition("website_type", 2, false);
-        Integer lanASP = websiteImpl.countWebsiteByCondition("website_type", 3, false);
-        Integer lanJSP = websiteImpl.countWebsiteByCondition("website_type", 4, false);
-        Integer lanOther = websiteImpl.countWebsiteByCondition("website_type", 5, true);
-        Integer dbNo = websiteImpl.countWebsiteByCondition("website_database", 1, false);
-        Integer dbMySql = websiteImpl.countWebsiteByCondition("website_database", 2, false);
-        Integer dbAccess = websiteImpl.countWebsiteByCondition("website_database", 3, false);
-        Integer dbMsSql = websiteImpl.countWebsiteByCondition("website_database", 4, false);
-        Integer dbOracle = websiteImpl.countWebsiteByCondition("website_database", 5, false);
-        Integer dbOther = websiteImpl.countWebsiteByCondition("website_database", 6, true);
-        Integer bugSql = websiteImpl.countWebsiteByCondition("website_notice_type", 1, false);
-        Integer bugXss = websiteImpl.countWebsiteByCondition("website_notice_type", 2, false);
-        Integer bugCsrf = websiteImpl.countWebsiteByCondition("website_notice_type", 3, false);
-        Integer bugFileUpload = websiteImpl.countWebsiteByCondition("website_notice_type", 4, false);
-        Integer bugJurisdiction = websiteImpl.countWebsiteByCondition("website_notice_type", 5, false);
-        Integer bugOther = websiteImpl.countWebsiteByCondition("website_notice_type", 6, true);
-        Integer bugCount = bugSql + bugXss + bugCsrf + bugFileUpload + bugJurisdiction + bugOther;
+
+    public void addNewRecord() {
+        newCountRecord(infoCount());
+    }
+
+    public void updateRecord() {
+        updateRecord(selectLastRecord());
+    }
+
+    private void newCountRecord(Count count) {
+        count.setId(0);
+        count.setUpdateTime(new Date());
+        try {
+            countMapper.insert(count);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
+
+    private Count selectLastRecord() {
+        try {
+            return countMapper.selectOne(new QueryWrapper<Count>().orderByDesc("count_id").last("limit 0,1"));
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
+
+    private void updateRecord(Count count) {
+        count.setUpdateTime(new Date());
+        try {
+            countMapper.updateById(count);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
+
+    private Count infoCount() {
+
         Count count = new Count();
-        count.setWebsite(websiteCount);
-        count.setDepartment(deptCount);
-        count.setBugCount(bugCount);
-        count.setBugCsrf(bugCsrf);
-        count.setBugFileUpload(bugFileUpload);
-        count.setBugJurisdiction(bugJurisdiction);
-        count.setBugOther(bugOther);
-        count.setBugSql(bugSql);
-        count.setBugXss(bugXss);
-        count.setDbAccess(dbAccess);
-        count.setDbMSSql(dbMsSql);
-        count.setDbMysql(dbMySql);
-        count.setDbNo(dbNo);
-        count.setDbOracle(dbOracle);
-        count.setDbOther(dbOther);
-        count.setLanAsp(lanASP);
-        count.setLanHtml(lanHtml);
-        count.setLanJsp(lanJSP);
-        count.setLanOther(lanOther);
-        count.setLanPhp(lanPHP);
+
+        count.setWebsite(websiteImpl.countWebsite());
+        count.setDepartment(departmentImpl.countDept());
+
+        count.setBugSql(websiteImpl.countWebsiteByCondition("website_notice_type", 1, false));
+        count.setBugXss(websiteImpl.countWebsiteByCondition("website_notice_type", 2, false));
+        count.setBugCsrf(websiteImpl.countWebsiteByCondition("website_notice_type", 3, false));
+        count.setBugFileUpload(websiteImpl.countWebsiteByCondition("website_notice_type", 4, false));
+        count.setBugJurisdiction(websiteImpl.countWebsiteByCondition("website_notice_type", 5, false));
+        count.setBugOther(websiteImpl.countWebsiteByCondition("website_notice_type", 6, true));
+        count.setBugCount();
+
+        count.setDbOther(websiteImpl.countWebsiteByCondition("website_database", 6, true));
+        count.setDbOracle(websiteImpl.countWebsiteByCondition("website_database", 5, false));
+        count.setDbAccess(websiteImpl.countWebsiteByCondition("website_database", 3, false));
+        count.setDbMSSql(websiteImpl.countWebsiteByCondition("website_database", 4, false));
+        count.setDbMysql(websiteImpl.countWebsiteByCondition("website_database", 2, false));
+        count.setDbNo(websiteImpl.countWebsiteByCondition("website_database", 1, false));
+
+        count.setLanHtml(websiteImpl.countWebsiteByCondition("website_type", 1, false));
+        count.setLanPhp(websiteImpl.countWebsiteByCondition("website_type", 2, false));
+        count.setLanAsp(websiteImpl.countWebsiteByCondition("website_type", 3, false));
+        count.setLanJsp(websiteImpl.countWebsiteByCondition("website_type", 4, false));
+        count.setLanOther(websiteImpl.countWebsiteByCondition("website_type", 5, true));
+
         return count;
     }
+
 }

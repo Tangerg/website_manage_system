@@ -1,10 +1,10 @@
 package com.suse.netcenter;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.suse.netcenter.service.impl.InformationImpl;
 import com.suse.netcenter.service.impl.WebsiteImpl;
-import org.springframework.expression.spel.ast.NullLiteral;
+import com.suse.netcenter.util.TimingTask;
 import org.springframework.util.CollectionUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
@@ -32,13 +32,11 @@ public class NetcenterApplicationTests {
     @Autowired
     LogMapper logMapper;
     @Autowired
-    NoticeMapper messageMapper;
+    MessageMapper messageMapper;
     @Autowired
     UserMapper userMapper;
     @Autowired
     WebsiteMapper websiteMapper;
-    @Autowired
-    NoticeMapper noticeMapper;
     @Autowired
     WebsiteImpl websiteImpl;
     @Autowired
@@ -134,7 +132,7 @@ public class NetcenterApplicationTests {
     }
     @Test
     public void messageTest(){
-        noticeMapper.selectCount(null);
+        messageMapper.selectCount(null);
     }
 
     @Test
@@ -147,6 +145,10 @@ public class NetcenterApplicationTests {
     public void infoWebsiteTest(){
         Msg count = informationImpl.infoAllWebsite();
         System.out.println(count);
+    }
+    @Test
+    public void taskTest() throws InterruptedException {
+        TimingTask timingTask = new TimingTask();
     }
 
     private <T> void print(List<T> list) {

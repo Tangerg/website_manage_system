@@ -32,8 +32,6 @@ public class ApplicationImpl implements ApplicationService {
         //condition 0所有 1待审核 2审核未通过 3审核通过
         Integer state = 0;
         switch (condition) {
-            case "0":
-                break;
             case "1":
                 state = 20;
                 break;
@@ -91,53 +89,41 @@ public class ApplicationImpl implements ApplicationService {
     }
 
     private boolean submitApplication(Application application) {
-        boolean flag = false;
         application.setAppState(20);
         try {
-            if (applicationMapper.insert(application) != 0) {
-                flag = true;
-            }
+            return (applicationMapper.insert(application) != 0);
         } catch (Exception e) {
             throw new RuntimeException("提交失败");
         }
-        return flag;
     }
 
     private IPage<Application> selectApplicationByPage(Integer state, Integer pageNum, Integer pageSize) {
         QueryWrapper<Application> queryWrapper = null;
+        Page<Application> page = new Page<>(pageNum, pageSize);
         if (state != 0) {
             queryWrapper = new QueryWrapper<Application>().eq("application_state", state);
         }
-        Page<Application> page = new Page<>(pageNum, pageSize);
-        IPage<Application> applicationIPage;
         try {
-            applicationIPage = applicationMapper.selectPage(page, queryWrapper);
+            return applicationMapper.selectPage(page, queryWrapper);
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
-        return applicationIPage;
     }
 
     private List<Application> selectApplicationByJobNum(String JobNum) {
-        List<Application> applicationList;
         try {
-            applicationList = applicationMapper.selectList(new QueryWrapper<Application>().eq("application_website_director_num", JobNum));
+            return applicationMapper.selectList(new QueryWrapper<Application>().eq("application_website_director_num", JobNum));
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
-        return applicationList;
     }
 
     private boolean updateApplicationById(Application application) {
-        boolean flag = false;
         try {
-            if (applicationMapper.updateById(application) != 0) {
-                flag = true;
-            }
+            return (applicationMapper.updateById(application) != 0);
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
-        return flag;
     }
 
     private Website Application2Website(Application application) {

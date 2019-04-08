@@ -3,7 +3,6 @@ package com.suse.netcenter.service.impl;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
-import com.suse.netcenter.dto.PageDto;
 import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
 import com.suse.netcenter.entity.Website;
@@ -12,8 +11,6 @@ import com.suse.netcenter.service.DepartmentService;
 import com.suse.netcenter.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,7 +51,7 @@ public class DepartmentImpl implements DepartmentService {
             List<Website> websiteList = websiteImpl.selectWebsiteByDept(id);
             return Msg.success()
                     .addData("deptInfo", department)
-                    .addData("director",director)
+                    .addData("director", director)
                     .addData("userList", userList)
                     .addData("websiteList", websiteList);
         }
@@ -95,79 +92,60 @@ public class DepartmentImpl implements DepartmentService {
     }
 
     Department selectDeptById(Integer id) {
-        Department department;
         try {
-            department = departmentMapper.selectById(id);
+            return departmentMapper.selectById(id);
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
-        return department;
     }
 
     private boolean addDept(Department department) {
-        boolean flag = false;
         department.setDeptId(0);
         try {
-            if (departmentMapper.insert(department) != 0) {
-                flag = true;
-            }
+            return (departmentMapper.insert(department) != 0);
         } catch (Exception e) {
             throw new RuntimeException("添加失败");
         }
-        return flag;
     }
 
     private boolean updateDept(Department department) {
-        boolean flag = false;
         try {
-            if (departmentMapper.updateById(department) != 0) {
-                flag = true;
-            }
+            return (departmentMapper.updateById(department) != 0);
         } catch (Exception e) {
             throw new RuntimeException("更新失败");
         }
-        return flag;
     }
 
     private boolean deleteDept(Integer id) {
-        boolean flag = false;
         try {
-            if (departmentMapper.deleteById(id) != 0) {
-                flag = true;
-            }
+            return (departmentMapper.deleteById(id) != 0);
         } catch (Exception e) {
             throw new RuntimeException("更新失败");
         }
-        return flag;
     }
 
-    private IPage selectDeptByPage(Integer pageNum, Integer pageSize) {
+    private IPage<Department> selectDeptByPage(Integer pageNum, Integer pageSize) {
         Page<Department> page = new Page<>(pageNum, pageSize);
-        IPage<Department> deptIPage;
         try {
-            deptIPage = departmentMapper.selectPage(page, null);
+            return departmentMapper.selectPage(page, null);
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
-        return deptIPage;
     }
 
-    List selectAllDept() {
-        List deptList;
+    private List<Department> selectAllDept() {
         try {
-            deptList = departmentMapper.selectList(null);
+            return departmentMapper.selectList(null);
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
-        return deptList;
     }
-    Integer countDept(){
-        Integer count = 0;
+
+    Integer countDept() {
         try {
-            count = departmentMapper.selectCount(null);
-        }catch (Exception e) {
+            return departmentMapper.selectCount(null);
+        } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
-        return count;
     }
 }
