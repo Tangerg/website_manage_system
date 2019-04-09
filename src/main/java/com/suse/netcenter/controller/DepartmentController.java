@@ -42,7 +42,7 @@ public class DepartmentController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/update/{id}")
-    public Msg deptUpdate(@PathVariable("id") Integer id, @RequestBody Department department) {
+    public Msg deptUpdate(@PathVariable("id") Integer id,@Valid @RequestBody Department department) {
         return departmentService.deptUpdate(id, department);
     }
 

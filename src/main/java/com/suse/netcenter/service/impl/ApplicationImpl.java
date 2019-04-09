@@ -89,7 +89,9 @@ public class ApplicationImpl implements ApplicationService {
     }
 
     private boolean submitApplication(Application application) {
+        application.setAppId(0);
         application.setAppState(20);
+        application.setAppSubmitTime(new Date());
         try {
             return (applicationMapper.insert(application) != 0);
         } catch (Exception e) {

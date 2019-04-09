@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
 /**
@@ -19,9 +20,10 @@ public class Message {
     @TableId(value = "message_id")
     private Integer msgId;
 
+    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "message_sender")
     private String msgSender;
-
+    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "message_receiver")
     private String msgReceiver;
 

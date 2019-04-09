@@ -7,6 +7,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * @author Tangerg
  * @create 2019-04-04 15:13
@@ -35,7 +37,7 @@ public class MessageController extends BaseController {
     @ApiOperation("发送消息")
     @UserLoginToken
     @PostMapping("/send")
-    public Msg msgSend(@RequestBody Message message,
+    public Msg msgSend(@Valid @RequestBody Message message,
                        @RequestHeader String token) {
         return messageService.sendMsg(message, token);
     }

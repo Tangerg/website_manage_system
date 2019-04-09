@@ -8,6 +8,8 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 
 /**
  * @author Tangerg
@@ -22,7 +24,7 @@ public class ApplicationController extends BaseController {
     @ApiOperation("正式提交申请")
     @UserLoginToken
     @PostMapping("/submit")
-    public Msg ApplicationSubmit(@RequestBody Application application, @RequestHeader String token) {
+    public Msg ApplicationSubmit(@Valid @RequestBody Application application, @RequestHeader String token) {
         return applicationService.ApplicationSubmit(application, token);
     }
 

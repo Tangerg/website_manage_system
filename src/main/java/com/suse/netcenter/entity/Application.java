@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -32,14 +31,17 @@ public class Application {
     private Integer appRecOperate;
 
     @NotNull(message = "部门负责人工号不能为空")
+    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "application_department_director")
     private String appDeptDirector;
 
     @NotNull(message = "办公电话不能为空")
+    @Pattern(regexp = "[0-9-()()]{7,18}", message = "电话格式不正确")
     @TableField(value = "application_office_phone")
     private String appOfficePhone;
 
     @NotNull(message = "网站负责人工号不能为空")
+    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "application_website_director_num")
     private String appWebDirectorNum;
 
@@ -47,7 +49,7 @@ public class Application {
     private String appWebDirectorName;
 
     @NotNull(message = "网站负责人手机号不能为空")
-    @Pattern(regexp = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$", message = "手机号格式不正确")
+    @Pattern(regexp = "0?(13|14|15|17|18)[0-9]{9}", message = "手机号格式不正确")
     @TableField(value = "application_website_director_phone")
     private String appWebDirectorTel;
 
@@ -59,20 +61,20 @@ public class Application {
     private String appWebsiteNameOld;
 
     @NotBlank(message = "网站域名不能为空")
-    @Pattern(regexp = "[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?", message = "域名格式不正确")
+    @Pattern(regexp = "^(?=^.{3,255}$)(http(s)?:\\/\\/)?(www\\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\\d+)*(\\/\\w+\\.\\w+)*([\\?&]\\w+=\\w*)*$", message = "域名格式不正确")
     @TableField(value = "application_website_domain_name")
     private String appWebsiteDomain;
     
-    @Pattern(regexp = "[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?", message = "域名格式不正确")
+    @Pattern(regexp = "^(?=^.{3,255}$)(http(s)?:\\/\\/)?(www\\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\\d+)*(\\/\\w+\\.\\w+)*([\\?&]\\w+=\\w*)*$", message = "域名格式不正确")
     @TableField(value = "application_website_domain_name_old")
     private String appWebsiteDomainOld;
 
     @NotBlank(message = "网站ip不能为空")
-    @Pattern(regexp = "((?:(?:25[0-5]|2[0-4]\\\\d|[01]?\\\\d?\\\\d)\\\\.){3}(?:25[0-5]|2[0-4]\\\\d|[01]?\\\\d?\\\\d))", message = "ip格式不正确")
+    @Pattern(regexp = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", message = "ip格式不正确")
     @TableField(value = "application_website_ip")
     private String appWebsiteIp;
 
-    @Pattern(regexp = "((?:(?:25[0-5]|2[0-4]\\\\d|[01]?\\\\d?\\\\d)\\\\.){3}(?:25[0-5]|2[0-4]\\\\d|[01]?\\\\d?\\\\d))", message = "ip格式不正确")
+    @Pattern(regexp = "(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)\\.(25[0-5]|2[0-4]\\d|[0-1]\\d{2}|[1-9]?\\d)", message = "ip格式不正确")
     @TableField(value = "application_website_ip_old")
     private String appWebsiteIpOld;
 

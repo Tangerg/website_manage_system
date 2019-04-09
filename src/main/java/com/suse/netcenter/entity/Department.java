@@ -7,6 +7,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * @author Tangerg
@@ -24,10 +25,12 @@ public class Department {
     private String deptName;
 
     @NotNull(message = "部门负责人工号不能为空")
+    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "department_director")
     private String deptDirector;
 
     @NotBlank(message = "部门办公电话不能为空")
+    @Pattern(regexp = "[0-9-()()]{7,18}", message = "电话格式不正确")
     @TableField(value = "department_office_phone")
     private String deptOfficePhone;
 

@@ -60,7 +60,7 @@ public class UserController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/add")
-    public Msg userAdd(@RequestBody User user) {
+    public Msg userAdd(@Valid @RequestBody User user) {
         return userService.userAdd(user);
     }
 
