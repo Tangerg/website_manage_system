@@ -8,6 +8,7 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /**
  * @author Tangerg
@@ -42,6 +43,7 @@ public class User {
     @TableField(value = "user_office_phone")
     private String userOfficePhone;
 
+    @Pattern(regexp = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$", message = "手机号格式不正确")
     @TableField(value = "user_tel")
     private String userTel;
 

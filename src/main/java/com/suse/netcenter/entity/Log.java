@@ -3,6 +3,7 @@ package com.suse.netcenter.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -30,6 +31,7 @@ public class Log {
     @TableField(value = "log_additional")
     private Integer logAdd;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "log_create_time")
     private Date logCreateTime;
 }

@@ -32,7 +32,7 @@ public class ApplicationController extends BaseController {
     @UserLoginToken
     @AdminToken
     @GetMapping("/query")
-    public Msg ApplicationQueryAll(@RequestParam(value = "condition", defaultValue = "1") String condition,
+    public Msg ApplicationQueryAll(@RequestParam(value = "condition", defaultValue = "0") String condition,
                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         return applicationService.ApplicationQueryAll(condition,pageNum,pageSize);

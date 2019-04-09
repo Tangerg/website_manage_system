@@ -1,6 +1,5 @@
 package com.suse.netcenter.controller;
 
-import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Message;
