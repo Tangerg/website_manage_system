@@ -22,7 +22,7 @@ public class Log {
     private String logJobNum;
 
     @TableField(value = "log_ip")
-    private Integer logIp;
+    private String logIp;
 
     @TableField(value = "log_operate")
     private Integer logOperate;

@@ -5,6 +5,7 @@ import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.util.TokenUtil;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -21,12 +22,12 @@ import java.lang.reflect.Method;
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object object) throws Exception {
+    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 如果不是映射到方法直接通过
-        if (!(object instanceof HandlerMethod)) {
+        if (!(handler instanceof HandlerMethod)) {
             return true;
         }
-        HandlerMethod handlerMethod = (HandlerMethod) object;
+        HandlerMethod handlerMethod = (HandlerMethod) handler;
         Method method = handlerMethod.getMethod();
 
         //检查是否有PassToken注释，有则跳过认证
@@ -43,7 +44,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             // 执行认证
             if (userLoginToken.required()) {
                 // 如果token为null或者"","       "
-                if (token == null || token.trim().isEmpty()) {
+                if (StringUtils.isEmpty(token.trim())) {
                     throw new RuntimeException("没有token，请重新登录");
                 }
                 TokenUtil tokenUtil = new TokenUtil();
@@ -55,11 +56,10 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     String userJobNum = JWT.decode(token).getAudience().get(1);
                     String userName = JWT.decode(token).getAudience().get(2);
                     String userRoles = JWT.decode(token).getAudience().get(3);
-                    if (userId == null || userId.trim().isEmpty() ||
-                            userRoles == null || userRoles.trim().isEmpty() ||
-                            userJobNum == null || userJobNum.trim().isEmpty() ||
-                            userName == null || userName.trim().isEmpty()
-                            ) {
+                    if (StringUtils.isEmpty(userId) ||
+                            StringUtils.isEmpty(userRoles) ||
+                            StringUtils.isEmpty(userJobNum) ||
+                            StringUtils.isEmpty(userName)) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
                     }
                     //检查是否有AdminToken的注解，有则检查token
