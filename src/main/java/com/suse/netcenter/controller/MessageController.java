@@ -35,7 +35,7 @@ public class MessageController extends BaseController {
 
     @ApiOperation("发送消息")
     @UserLoginToken
-    @GetMapping("/send")
+    @PostMapping("/send")
     public Msg msgSend(@RequestBody Message message,
                        @RequestHeader String token) {
         return messageService.sendMsg(message, token);

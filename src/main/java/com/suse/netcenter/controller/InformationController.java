@@ -5,10 +5,7 @@ import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Tangerg
@@ -30,7 +27,8 @@ public class InformationController extends BaseController {
     @UserLoginToken
     @AdminToken
     @GetMapping("/log")
-    public Msg infoLog() {
-        return informationService.infoLog();
+    public Msg infoLog(@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                       @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
+        return informationService.infoLog(pageNum,pageSize);
     }
 }

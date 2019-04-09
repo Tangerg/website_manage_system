@@ -10,5 +10,5 @@ import org.springframework.stereotype.Service;
 @Service
 public interface InformationService {
     Msg infoAllWebsite();
-    Msg infoLog();
+    Msg infoLog(Integer pageNum,Integer pageSize);
 }

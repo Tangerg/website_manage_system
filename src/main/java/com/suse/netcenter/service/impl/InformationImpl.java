@@ -1,18 +1,19 @@
 package com.suse.netcenter.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Count;
 import com.suse.netcenter.entity.Log;
 import com.suse.netcenter.mapper.CountMapper;
 import com.suse.netcenter.mapper.LogMapper;
 import com.suse.netcenter.service.InformationService;
+import com.suse.netcenter.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
-
 /**
  * @author Tangerg
  * @create 2019-03-27 11:10
@@ -34,13 +35,11 @@ public class InformationImpl implements InformationService {
     }
 
     @Override
-    public Msg infoLog() {
-        try {
-            List<Log> logList = logMapper.selectList(null);
-            return Msg.success().addData("info", logList);
-        } catch (Exception e) {
-            throw new RuntimeException("发生错误");
-        }
+    public Msg infoLog(Integer pageNum, Integer pageSize) {
+        IPage logPage=selectLogByPage(pageNum,pageSize);
+        return Msg.success()
+                .addData("pageInfo",new PageUtil().createPageDto(logPage))
+                .addData("logList", logPage.getRecords());
     }
 
     public void addNewRecord() {
@@ -61,6 +60,14 @@ public class InformationImpl implements InformationService {
         }
     }
 
+    private IPage<Log> selectLogByPage(Integer pageNum, Integer pageSize){
+        Page<Log> page = new Page<>(pageNum, pageSize);
+        try {
+            return logMapper.selectPage(page, null);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
     private Count selectLastRecord() {
         try {
             return countMapper.selectOne(new QueryWrapper<Count>().orderByDesc("count_id").last("limit 0,1"));
