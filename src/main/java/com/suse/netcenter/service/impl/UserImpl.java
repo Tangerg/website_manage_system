@@ -58,6 +58,24 @@ public class UserImpl implements UserService {
                 .addData("websiteList", websiteList)
                 .addData("token", token);
     }
+    /*重新获取用户信息*/
+    @Override
+    public Msg userInfo(String token) {
+        String userId = JWT.decode(token).getAudience().get(0);
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        String userRoles = JWT.decode(token).getAudience().get(3);
+        User user = selectUserByJobNum(userJobNum);
+        if (user == null) {
+            return Msg.fail().addMsg("该用户不存在");
+        }
+        Department department = departmentImp.selectDeptById(user.getUserDeptId());
+        List websiteList = websiteImp.selectWebsiteByJobNum(userJobNum);
+        Integer UnreadMsg = messageImp.selectCountUnreadMsgByJobNum(userJobNum);
+        return Msg.success().addData("user", user)
+                .addData("unread", UnreadMsg)
+                .addData("dept", department)
+                .addData("websiteList", websiteList);
+    }
 
     /*新增用户
      *  新增基本信息
@@ -143,6 +161,8 @@ public class UserImpl implements UserService {
         }
         return Msg.fail().addMsg("你没有权限");
     }
+
+
 
 
     /*由工号查询用户（未离职）*/

@@ -28,6 +28,13 @@ public class UserController extends BaseController {
     public Msg userLogin(@Valid @RequestBody UserDto userDto) {
         return userService.userLogin(userDto);
     }
+    /*用户获取信息*/
+    @ApiOperation("重新获取信息")
+    @UserLoginToken
+    @PostMapping("/info")
+    public Msg userInfo(@RequestHeader String token) {
+        return userService.userInfo(token);
+    }
 
     /*用户查询*/
     @ApiOperation("查询用户基本信息")

@@ -2,6 +2,7 @@ package com.suse.netcenter;
 
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.suse.netcenter.service.impl.ApplicationImpl;
 import com.suse.netcenter.service.impl.InformationImpl;
 import com.suse.netcenter.service.impl.WebsiteImpl;
 import com.suse.netcenter.util.TimingTask;
@@ -39,6 +40,8 @@ public class NetcenterApplicationTests {
     WebsiteMapper websiteMapper;
     @Autowired
     WebsiteImpl websiteImpl;
+    @Autowired
+    ApplicationImpl applicationImpl;
     @Autowired
     InformationImpl informationImpl;
 
@@ -151,6 +154,10 @@ public class NetcenterApplicationTests {
         TimingTask timingTask = new TimingTask();
     }
 
+    @Test
+    public void application2websiteTest() throws InterruptedException {
+        //List<Application> applicationList=applicationImpl.selectApplicationByPage("0",1,20);
+    }
     private <T> void print(List<T> list) {
         if (!CollectionUtils.isEmpty(list)) {
             list.forEach(System.out::println);
