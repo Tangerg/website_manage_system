@@ -140,7 +140,7 @@ public class NetcenterApplicationTests {
 
     @Test
     public void selectByConTest(){
-        int count = websiteImpl.countWebsiteByCondition("website_type",2,true);
+        int count = websiteImpl.countWebsiteByCondition("website_lan_type",2);
         System.out.println(count);
     }
 

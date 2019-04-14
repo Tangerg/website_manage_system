@@ -58,14 +58,15 @@ public class UserImpl implements UserService {
                 .addData("websiteList", websiteList)
                 .addData("token", token);
     }
+
     /*重新获取用户信息*/
     @Override
     public Msg userInfo(String token) {
         String userId = JWT.decode(token).getAudience().get(0);
         String userJobNum = JWT.decode(token).getAudience().get(1);
-        String userRoles = JWT.decode(token).getAudience().get(3);
+        //String userRoles = JWT.decode(token).getAudience().get(3);
         User user = selectUserByJobNum(userJobNum);
-        if (user == null) {
+        if (user == null || !userId.equals(user.getUserId().toString())) {
             return Msg.fail().addMsg("该用户不存在");
         }
         Department department = departmentImp.selectDeptById(user.getUserDeptId());
@@ -163,8 +164,6 @@ public class UserImpl implements UserService {
     }
 
 
-
-
     /*由工号查询用户（未离职）*/
     User selectUserByJobNum(String jobNum) {
         try {
@@ -182,6 +181,16 @@ public class UserImpl implements UserService {
             throw new RuntimeException("用户查询失败");
         }
     }*/
+
+    Integer countUserByDept(Integer id){
+        try {
+            return userMapper.selectCount(new QueryWrapper<User>()
+                    .eq("user_department_id", id)
+                    .eq("user_is_quit", 0));
+        } catch (Exception e) {
+            throw new RuntimeException("用户查询失败");
+        }
+    }
 
     List<User> selectUserListByDept(Integer id) {
         try {

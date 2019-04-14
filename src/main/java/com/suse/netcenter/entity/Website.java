@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -58,11 +57,17 @@ public class Website {
     @TableField(value = "website_port_out")
     private Integer WebsiteOutPort;
 
-    @TableField(value = "website_type")
-    private String WebsiteType;
+    @TableField(value = "website_lan_type")
+    private Integer WebsiteLanType;
 
-    @TableField(value = "website_database")
-    private String WebsiteDB;
+    @TableField(value = "website_lan_other")
+    private String WebsiteLanOther;
+
+    @TableField(value = "website_db_type")
+    private Integer WebsiteDBType;
+
+    @TableField(value = "website_db_other")
+    private String WebsiteDBOther;
 
     @TableField(value = "website_interactive_column")
     private Integer WebsiteIntColumn;
@@ -80,9 +85,18 @@ public class Website {
     private Integer WebsiteIsNotice;
 
     @TableField(value = "website_notice_type")
-    private String WebsiteNoticeType;
+    private Integer WebsiteNoticeType;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "website_create_time")
     private Date WebsiteCreateTime;
+
+    @TableField(value = "website_is_master")
+    private Integer WebsiteIsMaster;
+
+    @TableField(exist = false)
+    private String WebsiteDirectorName;
+
+    @TableField(exist = false)
+    private String WebsiteDeptName;
 }

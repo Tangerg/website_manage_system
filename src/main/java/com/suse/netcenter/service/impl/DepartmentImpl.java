@@ -29,16 +29,16 @@ public class DepartmentImpl implements DepartmentService {
     /*查询所有部门带分页*/
     @Override
     public Msg deptQueryByPage(Integer pageNum, Integer pageSize) {
-        IPage deptIPage = selectDeptByPage(pageNum, pageSize);
+        IPage<Department> deptIPage = selectDeptByPage(pageNum, pageSize);
         return Msg.success()
                 .addData("pageInfo", new PageUtil().createPageDto(deptIPage))
-                .addData("deptList", deptIPage.getRecords());
+                .addData("deptList", setMoreInfo(deptIPage.getRecords()));
     }
 
     /*查询所有部门*/
     @Override
     public Msg deptQueryAll() {
-        return Msg.success().addData("deptList", selectAllDept());
+        return Msg.success().addData("deptList", setMoreInfo(selectAllDept()));
     }
 
 
@@ -122,6 +122,20 @@ public class DepartmentImpl implements DepartmentService {
         } catch (Exception e) {
             throw new RuntimeException("更新失败");
         }
+    }
+    private List<Department> setMoreInfo(List<Department> DepartmentList){
+        for (Department department:DepartmentList) {
+            User user = userImpl.selectUserByJobNum(department.getDeptDirector());
+            department.setDeptTotalPeople(userImpl.countUserByDept(department.getDeptId()));
+            department.setDeptTotalWebSite(websiteImpl.countWebsiteByDept(department.getDeptId()));
+            if(user!=null){
+                department.setDeptDirectorName(user.getUserName());
+            }else{
+                department.setDeptDirectorName("该用户不存在");
+            }
+
+        }
+        return DepartmentList;
     }
 
     private IPage<Department> selectDeptByPage(Integer pageNum, Integer pageSize) {

@@ -102,26 +102,26 @@ public class InformationImpl implements InformationService {
         count.setWebsite(websiteImpl.countWebsite());
         count.setDepartment(departmentImpl.countDept());
 
-        count.setBugSql(websiteImpl.countWebsiteByCondition("website_notice_type", 1, false));
-        count.setBugXss(websiteImpl.countWebsiteByCondition("website_notice_type", 2, false));
-        count.setBugCsrf(websiteImpl.countWebsiteByCondition("website_notice_type", 3, false));
-        count.setBugFileUpload(websiteImpl.countWebsiteByCondition("website_notice_type", 4, false));
-        count.setBugJurisdiction(websiteImpl.countWebsiteByCondition("website_notice_type", 5, false));
-        count.setBugOther(websiteImpl.countWebsiteByCondition("website_notice_type", 6, true));
+        count.setBugSql(websiteImpl.countWebsiteByCondition("website_notice_type", 1));
+        count.setBugXss(websiteImpl.countWebsiteByCondition("website_notice_type", 2));
+        count.setBugCsrf(websiteImpl.countWebsiteByCondition("website_notice_type", 3));
+        count.setBugFileUpload(websiteImpl.countWebsiteByCondition("website_notice_type", 4));
+        count.setBugJurisdiction(websiteImpl.countWebsiteByCondition("website_notice_type", 5));
+        count.setBugOther(websiteImpl.countWebsiteByCondition("website_notice_type", 6));
         count.setBugCount();
 
-        count.setDbOther(websiteImpl.countWebsiteByCondition("website_database", 6, true));
-        count.setDbOracle(websiteImpl.countWebsiteByCondition("website_database", 5, false));
-        count.setDbAccess(websiteImpl.countWebsiteByCondition("website_database", 3, false));
-        count.setDbMSSql(websiteImpl.countWebsiteByCondition("website_database", 4, false));
-        count.setDbMysql(websiteImpl.countWebsiteByCondition("website_database", 2, false));
-        count.setDbNo(websiteImpl.countWebsiteByCondition("website_database", 1, false));
+        count.setDbOther(websiteImpl.countWebsiteByCondition("website_database", 6));
+        count.setDbOracle(websiteImpl.countWebsiteByCondition("website_database", 5));
+        count.setDbAccess(websiteImpl.countWebsiteByCondition("website_database", 3));
+        count.setDbMSSql(websiteImpl.countWebsiteByCondition("website_database", 4));
+        count.setDbMysql(websiteImpl.countWebsiteByCondition("website_database", 2));
+        count.setDbNo(websiteImpl.countWebsiteByCondition("website_database", 1));
 
-        count.setLanHtml(websiteImpl.countWebsiteByCondition("website_type", 1, false));
-        count.setLanPhp(websiteImpl.countWebsiteByCondition("website_type", 2, false));
-        count.setLanAsp(websiteImpl.countWebsiteByCondition("website_type", 3, false));
-        count.setLanJsp(websiteImpl.countWebsiteByCondition("website_type", 4, false));
-        count.setLanOther(websiteImpl.countWebsiteByCondition("website_type", 5, true));
+        count.setLanHtml(websiteImpl.countWebsiteByCondition("website_type", 1));
+        count.setLanPhp(websiteImpl.countWebsiteByCondition("website_type", 2));
+        count.setLanAsp(websiteImpl.countWebsiteByCondition("website_type", 3));
+        count.setLanJsp(websiteImpl.countWebsiteByCondition("website_type", 4));
+        count.setLanOther(websiteImpl.countWebsiteByCondition("website_type", 5));
 
         return count;
     }

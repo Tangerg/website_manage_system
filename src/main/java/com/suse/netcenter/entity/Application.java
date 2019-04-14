@@ -107,13 +107,19 @@ public class Application {
     @NotNull(message = "校外端口不能为空")
     private Integer appWebsiteOutPort;
 
-    @NotBlank(message = "网站语言不能为空")
-    @TableField(value = "application_website_type")
-    private String appWebsiteType;
+    @NotNull(message = "网站语言不能为空")
+    @TableField(value = "application_website_lan_type")
+    private Integer appWebsiteLanType;
 
-    @NotBlank(message = "数据库类型为空")
-    @TableField(value = "application_website_database")
-    private String appWebsiteDB;
+    @TableField(value = "application_website_lan_other")
+    private String appWebsiteLanOther;
+
+    @NotNull(message = "数据库类型不能为空")
+    @TableField(value = "application_website_db_type")
+    private Integer appWebsiteDBType;
+
+    @TableField(value = "application_website_db_other")
+    private String appWebsiteDBOther;
 
     @NotNull(message = "交互栏目不能为空")
     @TableField(value = "application_interactive_column")

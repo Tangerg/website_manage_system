@@ -134,7 +134,8 @@ public class ApplicationImpl implements ApplicationService {
         website.setWebsiteDeptId(application.getAppDeptId());
         website.setWebsiteDirectorNum(application.getAppWebDirectorNum());
         website.setWebsiteCreateTime(new Date());
-        website.setWebsiteDB(application.getAppWebsiteDB());
+        website.setWebsiteDBType(application.getAppWebsiteDBType());
+        website.setWebsiteDBOther(application.getAppWebsiteDBOther());
         website.setWebsiteDomain(application.getAppWebsiteDomain());
         website.setWebsiteInPort(application.getAppWebsiteInPort());
         website.setWebsiteIp(application.getAppWebsiteIp());
@@ -146,13 +147,15 @@ public class ApplicationImpl implements ApplicationService {
         website.setWebsiteSpaceCampus(application.getAppWebsiteSpaceCampus());
         website.setWebsiteSpaceRoom(application.getAppWebsiteSpaceRoom());
         website.setWebsiteSpaceType(application.getAppWebsiteSpaceType());
-        website.setWebsiteType(application.getAppWebsiteType());
+        website.setWebsiteLanType(application.getAppWebsiteLanType());
+        website.setWebsiteLanOther(application.getAppWebsiteLanOther());
         website.setWebsiteVisitRange(application.getAppVisitRange());
         website.setWebsiteNoticeType(null);
         website.setWebsiteSafetyAudit(1);
         website.setWebsiteIsNotice(0);
         website.setWebsiteIsOpen(1);
         website.setWebsiteIsRectify(0);
+        website.setWebsiteIsMaster(1);
         return website;
     }
 }

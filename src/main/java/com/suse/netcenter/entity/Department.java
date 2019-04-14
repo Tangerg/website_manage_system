@@ -29,14 +29,17 @@ public class Department {
     @TableField(value = "department_director")
     private String deptDirector;
 
+    @TableField(exist = false)
+    private String deptDirectorName;
+
     @NotBlank(message = "部门办公电话不能为空")
     @Pattern(regexp = "[0-9-()()]{7,18}", message = "电话格式不正确")
     @TableField(value = "department_office_phone")
     private String deptOfficePhone;
 
-    @TableField(value = "department_total_people")
+    @TableField(exist = false)
     private Integer deptTotalPeople;
 
-    @TableField(value = "department_total_website")
+    @TableField(exist = false)
     private Integer deptTotalWebSite;
 }

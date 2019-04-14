@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.entity.Department;
+import com.suse.netcenter.entity.User;
 import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.WebsiteMapper;
 import com.suse.netcenter.service.WebsiteService;
@@ -23,11 +25,17 @@ public class WebsiteImpl implements WebsiteService {
     @Autowired
     WebsiteMapper websiteMapper;
 
+    @Autowired
+    UserImpl userImpl;
+
+    @Autowired
+    DepartmentImpl departmentImpl;
+
     @Override
     public Msg queryWebsiteAll(Integer pageNum, Integer pageSize) {
         IPage<Website> websitePage = selectAllWebsite(pageNum, pageSize);
         return Msg.success().addData("pageInfo", new PageUtil().createPageDto(websitePage))
-                .addData("websiteList", websitePage.getRecords());
+                .addData("websiteList", addDeptNameAndUserName(websitePage.getRecords()));
     }
 
     @Override
@@ -48,6 +56,25 @@ public class WebsiteImpl implements WebsiteService {
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
+    }
+
+    private List<Website> addDeptNameAndUserName(List<Website> websiteList) {
+        for (Website website : websiteList) {
+            User user = userImpl.selectUserByJobNum(website.getWebsiteDirectorNum());
+            Department department = departmentImpl.selectDeptById(website.getWebsiteDeptId());
+            if (user == null) {
+                website.setWebsiteDirectorName("用户不存在或未设置");
+            } else {
+                website.setWebsiteDirectorName(user.getUserName());
+            }
+
+            if (department == null) {
+                website.setWebsiteDeptName("部门不存在或未设置");
+            } else {
+                website.setWebsiteDeptName(department.getDeptName());
+            }
+        }
+        return websiteList;
     }
 
     private boolean updateWebsite(Website website) {
@@ -98,16 +125,18 @@ public class WebsiteImpl implements WebsiteService {
         }
     }
 
-    //条件统计出网站语言，漏洞，数据库等信息
-    public Integer countWebsiteByCondition(String condition, Integer value, boolean flag) {
-        QueryWrapper<Website> queryWrapper = new QueryWrapper<>();
-        if (!flag) {
-            queryWrapper.eq(condition, value);
-        } else {
-            for (int i = 1; i < value; i++) {
-                queryWrapper.ne(condition, i);
-            }
+    Integer countWebsiteByDept(Integer id) {
+        try {
+            return websiteMapper.selectCount(new QueryWrapper<Website>().eq("website_department_id", id));
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
         }
+    }
+
+    //条件统计出网站语言，漏洞，数据库等信息
+    public Integer countWebsiteByCondition(String condition, Integer value) {
+        QueryWrapper<Website> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq(condition, value);
         try {
             return websiteMapper.selectCount(queryWrapper);
         } catch (Exception e) {
