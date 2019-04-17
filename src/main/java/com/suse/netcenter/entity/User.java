@@ -55,4 +55,7 @@ public class User {
 
     @TableField(value = "user_roles")
     private Integer userRoles;
+
+    @TableField(exist = false)
+    private String userDeptName;
 }

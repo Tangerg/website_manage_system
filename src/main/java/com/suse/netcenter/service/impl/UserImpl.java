@@ -9,6 +9,7 @@ import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
+import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.UserMapper;
 import com.suse.netcenter.service.UserService;
 import com.suse.netcenter.util.PageUtil;
@@ -131,10 +132,10 @@ public class UserImpl implements UserService {
      */
     @Override
     public Msg userQueryAll(Integer pageNum, Integer pageSize) {
-        IPage userIPage = selectUserByPage(pageNum, pageSize);
+        IPage<User> userIPage = selectUserByPage(pageNum, pageSize);
         return Msg.success()
                 .addData("pageInfo", new PageUtil().createPageDto(userIPage))
-                .addData("userList", userIPage.getRecords());
+                .addData("userList", addDeptName(userIPage.getRecords()));
     }
 
     /*
@@ -231,8 +232,22 @@ public class UserImpl implements UserService {
         }
     }
 
+    private List<User> addDeptName(List<User> userList) {
+        for (User user : userList) {
+            Department department = departmentImp.selectDeptById(user.getUserDeptId());
+            if (department == null) {
+                user.setUserDeptName("部门不存在或未设置");
+            } else {
+                user.setUserDeptName(department.getDeptName());
+            }
+        }
+        return userList;
+    }
+
     private boolean addUser(User user) {
         user.setUserId(0);
+        user.setUserIsQuit(0);
+        user.setUserPassword(user.getUserJobNum());
         try {
             return (userMapper.insert(user) != 0);
         } catch (Exception e) {
