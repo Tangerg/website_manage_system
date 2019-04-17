@@ -239,4 +239,12 @@ public class UserImpl implements UserService {
             throw new RuntimeException("添加失败");
         }
     }
+
+    Integer countDept() {
+        try {
+            return userMapper.selectCount(null);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
 }

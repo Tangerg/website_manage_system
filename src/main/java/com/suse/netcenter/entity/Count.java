@@ -22,6 +22,9 @@ public class Count {
     @TableField(value = "count_website")
     private Integer website;
 
+    @TableField(value = "count_user")
+    private Integer user;
+
     @TableField(value = "count_department")
     private Integer department;
 

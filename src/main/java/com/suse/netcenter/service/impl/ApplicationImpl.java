@@ -150,7 +150,7 @@ public class ApplicationImpl implements ApplicationService {
         website.setWebsiteLanType(application.getAppWebsiteLanType());
         website.setWebsiteLanOther(application.getAppWebsiteLanOther());
         website.setWebsiteVisitRange(application.getAppVisitRange());
-        website.setWebsiteNoticeType(null);
+        website.setWebsiteNoticeType(0);
         website.setWebsiteSafetyAudit(1);
         website.setWebsiteIsNotice(0);
         website.setWebsiteIsOpen(1);

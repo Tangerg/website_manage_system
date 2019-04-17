@@ -28,6 +28,8 @@ public class InformationImpl implements InformationService {
     WebsiteImpl websiteImpl;
     @Autowired
     DepartmentImpl departmentImpl;
+    @Autowired
+    UserImpl userImpl;
 
     @Override
     public Msg infoAllWebsite() {
@@ -87,9 +89,11 @@ public class InformationImpl implements InformationService {
     }
 
     private void updateRecord(Count count) {
+        Count tempCount = infoCount();
+        tempCount.setId(count.getId());
         count.setUpdateTime(new Date());
         try {
-            countMapper.updateById(count);
+            countMapper.updateById(tempCount);
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
@@ -101,6 +105,8 @@ public class InformationImpl implements InformationService {
 
         count.setWebsite(websiteImpl.countWebsite());
         count.setDepartment(departmentImpl.countDept());
+        count.setUser(userImpl.countDept());
+
 
         count.setBugSql(websiteImpl.countWebsiteByCondition("website_notice_type", 1));
         count.setBugXss(websiteImpl.countWebsiteByCondition("website_notice_type", 2));
@@ -110,18 +116,18 @@ public class InformationImpl implements InformationService {
         count.setBugOther(websiteImpl.countWebsiteByCondition("website_notice_type", 6));
         count.setBugCount();
 
-        count.setDbOther(websiteImpl.countWebsiteByCondition("website_database", 6));
-        count.setDbOracle(websiteImpl.countWebsiteByCondition("website_database", 5));
-        count.setDbAccess(websiteImpl.countWebsiteByCondition("website_database", 3));
-        count.setDbMSSql(websiteImpl.countWebsiteByCondition("website_database", 4));
-        count.setDbMysql(websiteImpl.countWebsiteByCondition("website_database", 2));
-        count.setDbNo(websiteImpl.countWebsiteByCondition("website_database", 1));
+        count.setDbOther(websiteImpl.countWebsiteByCondition("website_db_type", 6));
+        count.setDbOracle(websiteImpl.countWebsiteByCondition("website_db_type", 5));
+        count.setDbAccess(websiteImpl.countWebsiteByCondition("website_db_type", 3));
+        count.setDbMSSql(websiteImpl.countWebsiteByCondition("website_db_type", 4));
+        count.setDbMysql(websiteImpl.countWebsiteByCondition("website_db_type", 2));
+        count.setDbNo(websiteImpl.countWebsiteByCondition("website_db_type", 1));
 
-        count.setLanHtml(websiteImpl.countWebsiteByCondition("website_type", 1));
-        count.setLanPhp(websiteImpl.countWebsiteByCondition("website_type", 2));
-        count.setLanAsp(websiteImpl.countWebsiteByCondition("website_type", 3));
-        count.setLanJsp(websiteImpl.countWebsiteByCondition("website_type", 4));
-        count.setLanOther(websiteImpl.countWebsiteByCondition("website_type", 5));
+        count.setLanHtml(websiteImpl.countWebsiteByCondition("website_lan_type", 1));
+        count.setLanPhp(websiteImpl.countWebsiteByCondition("website_lan_type", 2));
+        count.setLanAsp(websiteImpl.countWebsiteByCondition("website_lan_type", 3));
+        count.setLanJsp(websiteImpl.countWebsiteByCondition("website_lan_type", 4));
+        count.setLanOther(websiteImpl.countWebsiteByCondition("website_lan_type", 5));
 
         return count;
     }

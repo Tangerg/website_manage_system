@@ -20,14 +20,16 @@ public class TimingTask {
     @Autowired
     private InformationImpl informationImpl;
 
-    //每隔两个小时更新一次最后一条记录
-    @Scheduled(cron = "0 0 */2 * * ?")
+    //每隔1个小时更新一次最后一条记录
+    @Scheduled(cron = "0 0 */1 * * ?")
+    //@Scheduled(cron = "*/10 * * * * ?")
     public void timingUpdateRecords() throws InterruptedException {
         informationImpl.updateRecord();
     }
 
     //每天01点01分插入一条新的记录
     @Scheduled(cron = "0 1 1 ? * *")
+    //@Scheduled(cron = "*/10 * * * * ?")
     public void timingInsertRecords() throws InterruptedException {
         informationImpl.addNewRecord();
     }

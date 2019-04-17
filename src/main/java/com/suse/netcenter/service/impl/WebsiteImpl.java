@@ -9,10 +9,11 @@ import com.suse.netcenter.entity.User;
 import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.WebsiteMapper;
 import com.suse.netcenter.service.WebsiteService;
-import com.suse.netcenter.util.PageUtil;;
+import com.suse.netcenter.util.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +49,22 @@ public class WebsiteImpl implements WebsiteService {
         return Msg.fail().addMsg("更新失败");
     }
 
+    @Override
+    public Msg addWebsite(Website website) {
+        if (insertWebsite(website)) {
+            return Msg.success().addMsg("添加成功");
+        }
+        return Msg.fail().addMsg("添加失败");
+    }
+
+    @Override
+    public Msg deleteWebsite(Integer id) {
+        if (deleteByWebsite(id)) {
+            return Msg.success().addMsg("删除成功");
+        }
+        return Msg.fail().addMsg("删除失败");
+    }
+
 
     private IPage<Website> selectAllWebsite(Integer pageNum, Integer pageSize) {
         Page<Website> page = new Page<>(pageNum, pageSize);
@@ -67,7 +84,6 @@ public class WebsiteImpl implements WebsiteService {
             } else {
                 website.setWebsiteDirectorName(user.getUserName());
             }
-
             if (department == null) {
                 website.setWebsiteDeptName("部门不存在或未设置");
             } else {
@@ -75,6 +91,14 @@ public class WebsiteImpl implements WebsiteService {
             }
         }
         return websiteList;
+    }
+
+    private boolean deleteByWebsite(Integer id) {
+        try {
+            return (websiteMapper.deleteById(id) != 0);
+        } catch (Exception e) {
+            throw new RuntimeException("删除失败");
+        }
     }
 
     private boolean updateWebsite(Website website) {
@@ -110,6 +134,16 @@ public class WebsiteImpl implements WebsiteService {
     }
 
     boolean addWebsiteByApplication(Website website) {
+        try {
+            return (websiteMapper.insert(website) != 0);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
+
+    private boolean insertWebsite(Website website) {
+        website.setWebsiteCreateTime(new Date());
+        website.setWebsiteId(0);
         try {
             return (websiteMapper.insert(website) != 0);
         } catch (Exception e) {

@@ -37,4 +37,20 @@ public class WebsiteController extends BaseController {
     public Msg updateWebsite(@PathVariable("id") Integer id, @RequestBody Website website) {
         return websiteService.updateWebsite(id, website);
     }
+
+    @ApiOperation("添加网站信息")
+    @UserLoginToken
+    @AdminToken
+    @PostMapping("/add")
+    public Msg addWebsite( @RequestBody Website website) {
+        return websiteService.addWebsite( website);
+    }
+
+    @ApiOperation("删除网站信息")
+    @UserLoginToken
+    @AdminToken
+    @GetMapping("/delete/{id}")
+    public Msg deleteWebsite( @PathVariable("id") Integer id) {
+        return websiteService.deleteWebsite( id);
+    }
 }
