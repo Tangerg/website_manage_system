@@ -43,7 +43,7 @@ public class MessageController extends BaseController {
     }
     @ApiOperation("删除消息")
     @UserLoginToken
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public Msg msgSend(@PathVariable("id") Integer id,
                        @RequestHeader String token) {
         return messageService.deleteMsg(id, token);

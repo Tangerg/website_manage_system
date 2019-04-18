@@ -131,7 +131,7 @@ public class DepartmentImpl implements DepartmentService {
             if(user!=null){
                 department.setDeptDirectorName(user.getUserName());
             }else{
-                department.setDeptDirectorName("该用户不存在");
+                department.setDeptDirectorName("用户不存在或未设置");
             }
 
         }

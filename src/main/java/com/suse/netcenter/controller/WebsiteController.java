@@ -49,7 +49,7 @@ public class WebsiteController extends BaseController {
     @ApiOperation("删除网站信息")
     @UserLoginToken
     @AdminToken
-    @GetMapping("/delete/{id}")
+    @PostMapping("/delete/{id}")
     public Msg deleteWebsite( @PathVariable("id") Integer id) {
         return websiteService.deleteWebsite( id);
     }
