@@ -54,7 +54,7 @@ public class ApplicationController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/review/{id}")
-    public Msg ApplicationReview(@PathVariable("id") Integer id, @RequestBody Application application) {
+    public Msg ApplicationReview(@PathVariable("id") Integer id, @Valid @RequestBody Application application) {
         return applicationService.ApplicationReview(id, application);
     }
 }

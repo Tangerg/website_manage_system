@@ -28,10 +28,11 @@ public class UserController extends BaseController {
     public Msg userLogin(@Valid @RequestBody UserDto userDto) {
         return userService.userLogin(userDto);
     }
+
     /*用户获取信息*/
     @ApiOperation("重新获取信息")
     @UserLoginToken
-    @PostMapping("/info")
+    @GetMapping("/info")
     public Msg userInfo(@RequestHeader String token) {
         return userService.userInfo(token);
     }
@@ -46,19 +47,19 @@ public class UserController extends BaseController {
         return userService.userQueryAll(pageNum, pageSize);
     }
 
-    /*单个用户查询*/
+    /*单个用户查询详细信息*/
     @ApiOperation("单用户查询详细信息")
     @UserLoginToken
     @GetMapping("/query/{JobNum}")
-    public Msg userQuery(@PathVariable("JobNum") String JobNum, @RequestHeader String token) {
-        return userService.userQuery(JobNum, token);
+    public Msg userQuery(@PathVariable("JobNum") String JobNum, @RequestHeader String token, @RequestParam(value = "flag", defaultValue = "0") Integer flag) {
+        return userService.userQuery(JobNum, token, flag);
     }
 
     /*用户修改*/
     @ApiOperation("修改用户信息")
     @UserLoginToken
     @PostMapping("/update/{JobNum}")
-    public Msg userUpdate(@PathVariable("JobNum") String JobNum, @RequestBody User user, @RequestHeader String token) {
+    public Msg userUpdate(@PathVariable("JobNum") String JobNum, @Valid @RequestBody User user, @RequestHeader String token) {
         return userService.userUpdate(JobNum, user, token);
     }
 

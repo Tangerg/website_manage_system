@@ -21,7 +21,7 @@ public interface UserService {
 
     Msg userQueryAll(Integer pageNum, Integer pageSize);
 
-    Msg userQuery(String JobNum,String token);
+    Msg userQuery(String JobNum,String token,Integer flag);
 
     Msg userInfo(String token);
 }

@@ -9,7 +9,6 @@ import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
-import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.UserMapper;
 import com.suse.netcenter.service.UserService;
 import com.suse.netcenter.util.PageUtil;
@@ -145,7 +144,7 @@ public class UserImpl implements UserService {
      *   查询该用户拥有的网站
      */
     @Override
-    public Msg userQuery(String JobNum, String token) {
+    public Msg userQuery(String JobNum, String token, Integer flag) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         String userRoles = JWT.decode(token).getAudience().get(3);
         //传入的工号等于token中的工号或者权限为管理员
@@ -154,12 +153,17 @@ public class UserImpl implements UserService {
             if (user == null) {
                 return Msg.fail().addMsg("该用户不存在");
             }
-            Department department = departmentImp.selectDeptById(user.getUserDeptId());
-            List websiteList = websiteImp.selectWebsiteByJobNum(userJobNum);
-            return Msg.success()
-                    .addData("user", user)
-                    .addData("dept", department)
-                    .addData("websiteList", websiteList);
+            if (flag.equals(0)) {
+                return Msg.success()
+                        .addData("user", user);
+            } else if (flag.equals(1)) {
+                Department department = departmentImp.selectDeptById(user.getUserDeptId());
+                List websiteList = websiteImp.selectWebsiteByJobNum(userJobNum);
+                return Msg.success()
+                        .addData("user", user)
+                        .addData("dept", department)
+                        .addData("websiteList", websiteList);
+            }
         }
         return Msg.fail().addMsg("你没有权限");
     }
@@ -183,7 +187,7 @@ public class UserImpl implements UserService {
         }
     }*/
 
-    Integer countUserByDept(Integer id){
+    Integer countUserByDept(Integer id) {
         try {
             return userMapper.selectCount(new QueryWrapper<User>()
                     .eq("user_department_id", id)
@@ -245,6 +249,7 @@ public class UserImpl implements UserService {
     }
 
     private boolean addUser(User user) {
+        user.setUserRoles(0);
         user.setUserId(0);
         user.setUserIsQuit(0);
         user.setUserPassword(user.getUserJobNum());
