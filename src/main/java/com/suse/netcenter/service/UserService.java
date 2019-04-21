@@ -1,6 +1,7 @@
 package com.suse.netcenter.service;
 
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.dto.PasswordDto;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.User;
 import org.springframework.stereotype.Service;
@@ -24,4 +25,8 @@ public interface UserService {
     Msg userQuery(String JobNum,String token,Integer flag);
 
     Msg userInfo(String token);
+
+    Msg userResetPassword(String JobNum);
+
+    Msg modifyPassword(String JobNum, PasswordDto password, String token);
 }

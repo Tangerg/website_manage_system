@@ -4,6 +4,7 @@ import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.dto.PasswordDto;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.User;
 import io.swagger.annotations.Api;
@@ -79,5 +80,23 @@ public class UserController extends BaseController {
     @PostMapping("/delete/{JobNum}")
     public Msg userDelete(@PathVariable("JobNum") String JobNum) {
         return userService.userDelete(JobNum);
+    }
+
+
+    /*重置密码*/
+    @ApiOperation("重置用户密码")
+    @UserLoginToken
+    @AdminToken
+    @GetMapping("/reset/{jobNum}")
+    public Msg userAdd(@PathVariable("JobNum") String JobNum) {
+        return userService.userResetPassword(JobNum);
+    }
+
+    /*修改密码*/
+    @ApiOperation("修改用户密码")
+    @UserLoginToken
+    @GetMapping("/modify/{jobNum}")
+    public Msg userAdd(@PathVariable("JobNum") String JobNum, PasswordDto password, @RequestHeader String token) {
+        return userService.modifyPassword(JobNum,password,token);
     }
 }

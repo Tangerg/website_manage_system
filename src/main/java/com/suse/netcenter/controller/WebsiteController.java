@@ -5,10 +5,7 @@ import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Website;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 /**

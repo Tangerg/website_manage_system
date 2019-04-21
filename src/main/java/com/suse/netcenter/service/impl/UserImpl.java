@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
+import com.suse.netcenter.dto.PasswordDto;
 import com.suse.netcenter.dto.UserDto;
 import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.User;
@@ -168,6 +169,40 @@ public class UserImpl implements UserService {
         return Msg.fail().addMsg("你没有权限");
     }
 
+    //重置用户密码
+    @Override
+    public Msg userResetPassword(String JobNum){
+        User user = selectUserByJobNum(JobNum);
+        if (user == null) {
+            return Msg.fail().addMsg("该用户不存在");
+        }
+        user.setUserPassword(user.getUserJobNum());
+        if(updateUserByIdAndJobNum(user)){
+            return Msg.success().addMsg("重置成功");
+        }
+        return Msg.fail().addMsg("重置失败");
+    }
+
+    //修改用户密码
+    @Override
+    public Msg modifyPassword(String JobNum, PasswordDto password, String token){
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        if(userJobNum.equals(JobNum)){
+            User user = selectUserByJobNum(JobNum);
+            if (user == null) {
+                return Msg.fail().addMsg("该用户不存在");
+            }
+            if(user.getUserPassword().equals(password.getPasswordOld())){
+                user.setUserPassword(password.getPasswordNew());
+                if(updateUserByIdAndJobNum(user)){
+                    return Msg.success().addMsg("修改成功");
+                }
+                return Msg.fail().addMsg("修改失败");
+            }
+            return Msg.fail().addMsg("原始密码不正确");
+        }
+        return Msg.fail().addMsg("你没有权限");
+    }
 
     /*由工号查询用户（未离职）*/
     User selectUserByJobNum(String jobNum) {

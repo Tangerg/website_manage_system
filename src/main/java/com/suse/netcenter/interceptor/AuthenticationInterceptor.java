@@ -4,7 +4,9 @@ import com.auth0.jwt.JWT;
 import com.suse.netcenter.annotation.AdminToken;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
+import com.suse.netcenter.service.LogService;
 import com.suse.netcenter.util.TokenUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -21,6 +23,8 @@ import java.lang.reflect.Method;
  * jwt拦截器
  */
 public class AuthenticationInterceptor implements HandlerInterceptor {
+    @Autowired
+    LogService logService;
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 如果不是映射到方法直接通过
@@ -62,6 +66,9 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                             StringUtils.isEmpty(userName)) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
                     }
+                    String ip = request.getRemoteAddr();//获取ip
+                    String path = request.getServletPath();//获取请求地址
+                    logService.addLog(userJobNum,ip,path);
                     //检查是否有AdminToken的注解，有则检查token
                     if (method.isAnnotationPresent(AdminToken.class)) {
                         AdminToken adminToken = method.getAnnotation(AdminToken.class);

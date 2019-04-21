@@ -91,7 +91,7 @@ public class InformationImpl implements InformationService {
     private void updateRecord(Count count) {
         Count tempCount = infoCount();
         tempCount.setId(count.getId());
-        count.setUpdateTime(new Date());
+        tempCount.setUpdateTime(new Date());
         try {
             countMapper.updateById(tempCount);
         } catch (Exception e) {
