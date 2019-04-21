@@ -87,7 +87,7 @@ public class UserController extends BaseController {
     @ApiOperation("重置用户密码")
     @UserLoginToken
     @AdminToken
-    @GetMapping("/reset/{jobNum}")
+    @GetMapping("/reset/{JobNum}")
     public Msg userAdd(@PathVariable("JobNum") String JobNum) {
         return userService.userResetPassword(JobNum);
     }
@@ -95,8 +95,8 @@ public class UserController extends BaseController {
     /*修改密码*/
     @ApiOperation("修改用户密码")
     @UserLoginToken
-    @GetMapping("/modify/{jobNum}")
-    public Msg userAdd(@PathVariable("JobNum") String JobNum, PasswordDto password, @RequestHeader String token) {
+    @PostMapping("/modify/{JobNum}")
+    public Msg userAdd(@PathVariable("JobNum") String JobNum, @RequestBody PasswordDto password, @RequestHeader String token) {
         return userService.modifyPassword(JobNum,password,token);
     }
 }

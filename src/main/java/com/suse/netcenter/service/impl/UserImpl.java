@@ -180,7 +180,7 @@ public class UserImpl implements UserService {
         if(updateUserByIdAndJobNum(user)){
             return Msg.success().addMsg("重置成功");
         }
-        return Msg.fail().addMsg("重置失败");
+        return Msg.fail().addMsg("发生错误，重置失败");
     }
 
     //修改用户密码

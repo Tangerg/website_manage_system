@@ -68,7 +68,8 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                     }
                     String ip = request.getRemoteAddr();//获取ip
                     String path = request.getServletPath();//获取请求地址
-                    logService.addLog(userJobNum,ip,path);
+                    System.out.println(ip+path);
+                    //logService.addLog(userJobNum,ip,path);
                     //检查是否有AdminToken的注解，有则检查token
                     if (method.isAnnotationPresent(AdminToken.class)) {
                         AdminToken adminToken = method.getAnnotation(AdminToken.class);
