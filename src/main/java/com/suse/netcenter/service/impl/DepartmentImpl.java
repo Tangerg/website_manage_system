@@ -1,5 +1,6 @@
 package com.suse.netcenter.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
@@ -141,7 +142,7 @@ public class DepartmentImpl implements DepartmentService {
     private IPage<Department> selectDeptByPage(Integer pageNum, Integer pageSize) {
         Page<Department> page = new Page<>(pageNum, pageSize);
         try {
-            return departmentMapper.selectPage(page, null);
+            return departmentMapper.selectPage(page, new QueryWrapper<Department>().orderByDesc("department_id"));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }

@@ -122,7 +122,7 @@ public class MessageImpl implements MessageService {
     private IPage<Message> selectMsgByCondition(Integer condition, Integer pageNum, Integer pageSize, String userJobNum) {
         Page<Message> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("message_is_del", 0).eq("message_receiver", userJobNum);
+        queryWrapper.eq("message_is_del", 0).eq("message_receiver", userJobNum).orderByDesc("message_id");
         if (condition != 2) {
             queryWrapper.eq("message_state", condition);
         }

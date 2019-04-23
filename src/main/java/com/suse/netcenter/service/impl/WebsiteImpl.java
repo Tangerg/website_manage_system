@@ -69,7 +69,7 @@ public class WebsiteImpl implements WebsiteService {
     private IPage<Website> selectAllWebsite(Integer pageNum, Integer pageSize) {
         Page<Website> page = new Page<>(pageNum, pageSize);
         try {
-            return websiteMapper.selectPage(page, null);
+            return websiteMapper.selectPage(page, new QueryWrapper<Website>().orderByDesc("website_id"));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
@@ -119,7 +119,7 @@ public class WebsiteImpl implements WebsiteService {
 
     List selectWebsiteByJobNum(String JobNum) {
         try {
-            return websiteMapper.selectList(new QueryWrapper<Website>().eq("website_director_num", JobNum));
+            return websiteMapper.selectList(new QueryWrapper<Website>().eq("website_director_num", JobNum).orderByDesc("website_id"));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
@@ -127,7 +127,7 @@ public class WebsiteImpl implements WebsiteService {
 
     List<Website> selectWebsiteByDept(Integer id) {
         try {
-            return websiteMapper.selectList(new QueryWrapper<Website>().eq("website_department_id", id));
+            return websiteMapper.selectList(new QueryWrapper<Website>().eq("website_department_id", id).orderByDesc("website_id"));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }

@@ -75,7 +75,7 @@ public class InformationImpl implements InformationService {
     private IPage<Log> selectLogByPage(Integer pageNum, Integer pageSize){
         Page<Log> page = new Page<>(pageNum, pageSize);
         try {
-            return logMapper.selectPage(page, null);
+            return logMapper.selectPage(page, new QueryWrapper<Log>().orderByDesc("log_id"));
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }

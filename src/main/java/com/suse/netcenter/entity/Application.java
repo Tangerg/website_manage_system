@@ -30,10 +30,14 @@ public class Application {
     @TableField(value = "application_record_operate")
     private Integer appRecOperate;
 
-    @NotNull(message = "部门负责人工号不能为空")
-    @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
-    @TableField(value = "application_department_director")
-    private String appDeptDirector;
+    //@NotNull(message = "部门负责人工号不能为空")
+    //@Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
+    @TableField(value = "application_department_director_num")
+    private String appDeptDirectorNum;
+
+    @NotBlank(message = "部门负责人姓名不能为空")
+    @TableField(value = "application_department_director_name")
+    private String appDeptDirectorName;
 
     @NotNull(message = "办公电话不能为空")
     @Pattern(regexp = "[0-9-()()]{7,18}", message = "电话格式不正确")
@@ -45,6 +49,7 @@ public class Application {
     @TableField(value = "application_website_director_num")
     private String appWebDirectorNum;
 
+    @NotBlank(message = "网站负责人姓名不能为空")
     @TableField(value = "application_website_director_name")
     private String appWebDirectorName;
 
@@ -100,11 +105,9 @@ public class Application {
     private String appWebsiteSpaceRoom;
 
     @TableField(value = "application_website_port_in")
-    @NotNull(message = "校内端口不能为空")
     private Integer appWebsiteInPort;
 
     @TableField(value = "application_website_port_out")
-    @NotNull(message = "校外端口不能为空")
     private Integer appWebsiteOutPort;
 
     @NotNull(message = "网站语言不能为空")

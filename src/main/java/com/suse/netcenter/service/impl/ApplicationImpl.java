@@ -103,7 +103,7 @@ public class ApplicationImpl implements ApplicationService {
         QueryWrapper<Application> queryWrapper = null;
         Page<Application> page = new Page<>(pageNum, pageSize);
         if (state != 0) {
-            queryWrapper = new QueryWrapper<Application>().eq("application_state", state);
+            queryWrapper = new QueryWrapper<Application>().eq("application_state", state).orderByDesc("application_id");
         }
         try {
             return applicationMapper.selectPage(page, queryWrapper);
@@ -114,7 +114,7 @@ public class ApplicationImpl implements ApplicationService {
 
     private List<Application> selectApplicationByJobNum(String JobNum) {
         try {
-            return applicationMapper.selectList(new QueryWrapper<Application>().eq("application_website_director_num", JobNum));
+            return applicationMapper.selectList(new QueryWrapper<Application>().eq("application_website_director_num", JobNum).orderByDesc("application_id"));
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }
@@ -151,7 +151,6 @@ public class ApplicationImpl implements ApplicationService {
         website.setWebsiteLanOther(application.getAppWebsiteLanOther());
         website.setWebsiteVisitRange(application.getAppVisitRange());
         website.setWebsiteNoticeType(0);
-        website.setWebsiteSafetyAudit(1);
         website.setWebsiteIsNotice(0);
         website.setWebsiteIsOpen(1);
         website.setWebsiteIsRectify(0);

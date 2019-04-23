@@ -207,7 +207,7 @@ public class UserImpl implements UserService {
     /*由工号查询用户（未离职）*/
     User selectUserByJobNum(String jobNum) {
         try {
-            return userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0));
+            return userMapper.selectOne(new QueryWrapper<User>().eq("user_job_num", jobNum).eq("user_is_quit", 0).orderByDesc("user_id"));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
@@ -236,7 +236,8 @@ public class UserImpl implements UserService {
         try {
             return userMapper.selectList(new QueryWrapper<User>()
                     .eq("user_department_id", id)
-                    .eq("user_is_quit", 0));
+                    .eq("user_is_quit", 0)
+                    .orderByDesc("user_id"));
         } catch (Exception e) {
             throw new RuntimeException("用户查询失败");
         }
@@ -265,7 +266,7 @@ public class UserImpl implements UserService {
         Page<User> page = new Page<>(pageNum, pageSize);
         try {
             return userMapper.selectPage(page, new QueryWrapper<User>()
-                    .eq("user_is_quit", 0));
+                    .eq("user_is_quit", 0).orderByDesc("user_id"));
         } catch (Exception e) {
             throw new RuntimeException("查询失败");
         }
