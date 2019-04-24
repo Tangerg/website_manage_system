@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Application;
+import com.suse.netcenter.entity.Department;
 import com.suse.netcenter.entity.Website;
 import com.suse.netcenter.mapper.ApplicationMapper;
 import com.suse.netcenter.service.ApplicationService;
@@ -27,33 +28,23 @@ public class ApplicationImpl implements ApplicationService {
     @Autowired
     private WebsiteImpl websiteImpl;
 
+    @Autowired
+    private DepartmentImpl departmentImpl;
+
     @Override
     public Msg ApplicationQueryAll(String condition, Integer pageNum, Integer pageSize) {
-        //condition 0所有 1待审核 2审核未通过 3审核通过
-        Integer state = 0;
-        switch (condition) {
-            case "1":
-                state = 20;
-                break;
-            case "2":
-                state = 30;
-                break;
-            case "3":
-                state = 40;
-                break;
-            default:
-                break;
-        }
-        IPage applicationIPage = selectApplicationByPage(state, pageNum, pageSize);
+        IPage<Application> applicationIPage = selectApplicationByPage(condition2state(condition), pageNum, pageSize);
         return Msg.success().addData("pageInfo", new PageUtil().createPageDto(applicationIPage))
-                .addData("applicationList", applicationIPage.getRecords());
+                .addData("applicationList", addDeptName(applicationIPage.getRecords()));
     }
 
     @Override
-    public Msg ApplicationQuery(String JobNum, String token) {
+    public Msg ApplicationQuery(String JobNum, String condition, Integer pageNum, Integer pageSize, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         if (JobNum.equals(userJobNum)) {
-            return Msg.success().addData("applicationList", selectApplicationByJobNum(JobNum));
+            IPage applicationIPage = selectApplicationByJobNum(JobNum, condition2state(condition), pageNum, pageSize);
+            return Msg.success().addData("pageInfo", new PageUtil().createPageDto(applicationIPage))
+                    .addData("applicationList",  addDeptName(applicationIPage.getRecords()));
         }
         return Msg.fail().addMsg("你没有权限");
     }
@@ -88,6 +79,25 @@ public class ApplicationImpl implements ApplicationService {
         return Msg.fail().addMsg("参数错误");
     }
 
+    private Integer condition2state(String condition) {
+        //condition 0所有 1待审核 2审核未通过 3审核通过
+        Integer state = 0;
+        switch (condition) {
+            case "1":
+                state = 20;
+                break;
+            case "2":
+                state = 30;
+                break;
+            case "3":
+                state = 40;
+                break;
+            default:
+                break;
+        }
+        return state;
+    }
+
     private boolean submitApplication(Application application) {
         application.setAppId(0);
         application.setAppState(20);
@@ -100,10 +110,10 @@ public class ApplicationImpl implements ApplicationService {
     }
 
     private IPage<Application> selectApplicationByPage(Integer state, Integer pageNum, Integer pageSize) {
-        QueryWrapper<Application> queryWrapper = null;
+        QueryWrapper<Application> queryWrapper = new QueryWrapper<Application>().orderByDesc("application_id");
         Page<Application> page = new Page<>(pageNum, pageSize);
         if (state != 0) {
-            queryWrapper = new QueryWrapper<Application>().eq("application_state", state).orderByDesc("application_id");
+            queryWrapper = queryWrapper.eq("application_state", state);
         }
         try {
             return applicationMapper.selectPage(page, queryWrapper);
@@ -112,9 +122,26 @@ public class ApplicationImpl implements ApplicationService {
         }
     }
 
-    private List<Application> selectApplicationByJobNum(String JobNum) {
+    private List<Application> addDeptName(List<Application> applicationList) {
+        for (Application application : applicationList) {
+            Department department = departmentImpl.selectDeptById(application.getAppDeptId());
+            if (department == null) {
+                application.setAppDeptName("部门不存在或未设置");
+            } else {
+                application.setAppDeptName(department.getDeptName());
+            }
+        }
+        return applicationList;
+    }
+
+    private IPage<Application> selectApplicationByJobNum(String JobNum, Integer state, Integer pageNum, Integer pageSize) {
+        QueryWrapper<Application> queryWrapper = new QueryWrapper<Application>().eq("application_website_director_num", JobNum).orderByDesc("application_id");
+        Page<Application> page = new Page<>(pageNum, pageSize);
+        if (state != 0) {
+            queryWrapper = queryWrapper.eq("application_state", state);
+        }
         try {
-            return applicationMapper.selectList(new QueryWrapper<Application>().eq("application_website_director_num", JobNum).orderByDesc("application_id"));
+            return applicationMapper.selectPage(page, queryWrapper);
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }

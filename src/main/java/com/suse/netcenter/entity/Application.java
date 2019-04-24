@@ -26,6 +26,9 @@ public class Application {
     @TableField(value = "application_department_id")
     private Integer appDeptId;
 
+    @TableField(exist = false)
+    private String appDeptName;
+
     @NotNull(message = "备案操作不能为空")
     @TableField(value = "application_record_operate")
     private Integer appRecOperate;

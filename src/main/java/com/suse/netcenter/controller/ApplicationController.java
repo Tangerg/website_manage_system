@@ -37,15 +37,19 @@ public class ApplicationController extends BaseController {
     public Msg ApplicationQueryAll(@RequestParam(value = "condition", defaultValue = "0") String condition,
                                    @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
-        return applicationService.ApplicationQueryAll(condition,pageNum,pageSize);
+        return applicationService.ApplicationQueryAll(condition, pageNum, pageSize);
     }
 
     //查询个人所有申请
     @ApiOperation("查询个人所有申请")
     @UserLoginToken
     @GetMapping("/query/{JobNum}")
-    public Msg ApplicationQuery(@PathVariable("JobNum") String JobNum, @RequestHeader String token) {
-        return applicationService.ApplicationQuery(JobNum, token);
+    public Msg ApplicationQuery(@PathVariable("JobNum") String JobNum,
+                                @RequestParam(value = "condition", defaultValue = "0") String condition,
+                                @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum,
+                                @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize,
+                                @RequestHeader String token) {
+        return applicationService.ApplicationQuery(JobNum, condition, pageNum, pageSize, token);
     }
 
 
