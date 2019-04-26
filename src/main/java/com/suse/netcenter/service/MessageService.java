@@ -15,7 +15,9 @@ public interface MessageService {
 
     Msg sendMsg(Message message, String token);
 
-    Msg deleteMsg(Integer id, String token);
+    Msg trashMsg(Integer id, String token);
 
     Msg readMsg(Integer id, String token);
+
+    Msg deleteMsg(Integer id, String token);
 }

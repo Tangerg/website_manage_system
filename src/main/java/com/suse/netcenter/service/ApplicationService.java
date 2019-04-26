@@ -12,6 +12,6 @@ import org.springframework.stereotype.Service;
 public interface ApplicationService {
     Msg ApplicationQueryAll(String condition,Integer pageNum,Integer pageSize);
     Msg ApplicationSubmit(Application application,String token);
-    Msg ApplicationReview(Integer id,Application application);
+    Msg ApplicationReview(Integer id,Integer state);
     Msg ApplicationQuery(String JobNum, String condition,Integer pageNum,Integer pageSize,String token);
 }

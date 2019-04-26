@@ -23,6 +23,7 @@ public class MessageController extends BaseController {
         0：未读
         1：已读
         2：所有
+        3：软删除
     * */
     @ApiOperation("接收所有消息")
     @UserLoginToken
@@ -41,10 +42,18 @@ public class MessageController extends BaseController {
                        @RequestHeader String token) {
         return messageService.sendMsg(message, token);
     }
-    @ApiOperation("删除消息")
+    @ApiOperation("删除消息，放入回收站")
+    @UserLoginToken
+    @PostMapping("/trash/{id}")
+    public Msg msgTrash(@PathVariable("id") Integer id,
+                       @RequestHeader String token) {
+        return messageService.trashMsg(id, token);
+    }
+
+    @ApiOperation("真。删除消息")
     @UserLoginToken
     @PostMapping("/delete/{id}")
-    public Msg msgSend(@PathVariable("id") Integer id,
+    public Msg msgDelete(@PathVariable("id") Integer id,
                        @RequestHeader String token) {
         return messageService.deleteMsg(id, token);
     }

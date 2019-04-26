@@ -27,13 +27,16 @@ public class MessageImpl implements MessageService {
     public Msg queryMsg(String condition, Integer pageNum, Integer pageSize, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         Integer state = 2;
-        /*condition0：未读 1：已读2：所有* */
+        /*condition 0：未读 1：已读 2：所有 3：软删除* */
         switch (condition) {
             case "0":
                 state = 0;
                 break;
             case "1":
                 state = 1;
+                break;
+            case "3":
+                state = 3;
                 break;
             default:
                 break;
@@ -57,29 +60,51 @@ public class MessageImpl implements MessageService {
     }
 
     @Override
-    public Msg deleteMsg(Integer id, String token) {
+    public Msg trashMsg(Integer id, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         Message message = selectMsgById(id);
-        if (userJobNum.equals(message.getMsgReceiver())) {
-            if (deleteOrReadMsgById(message,true)) {
-                return Msg.success().addMsg("删除成功");
+        if (message != null) {
+            if (userJobNum.equals(message.getMsgReceiver())) {
+                if (deleteOrReadMsgById(message, true)) {
+                    return Msg.success().addMsg("删除成功");
+                }
+                return Msg.fail().addMsg("删除失败");
             }
-            return Msg.fail().addMsg("删除失败");
+            return Msg.fail().addMsg("你没有权限");
         }
-        return Msg.fail().addMsg("你没有权限");
+        return Msg.fail().addMsg("该消息记录不存在");
     }
 
     @Override
     public Msg readMsg(Integer id, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         Message message = selectMsgById(id);
-        if (userJobNum.equals(message.getMsgReceiver())) {
-            if (deleteOrReadMsgById(message,false)) {
-                return Msg.success().addMsg("操作成功");
+        if (message != null) {
+            if (userJobNum.equals(message.getMsgReceiver())) {
+                if (deleteOrReadMsgById(message, false)) {
+                    return Msg.success().addMsg("操作成功");
+                }
+                return Msg.fail().addMsg("操作失败");
             }
-            return Msg.fail().addMsg("操作失败");
+            return Msg.fail().addMsg("你没有权限");
         }
-        return Msg.fail().addMsg("你没有权限");
+        return Msg.fail().addMsg("该消息记录不存在");
+    }
+
+    @Override
+    public Msg deleteMsg(Integer id, String token) {
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        Message message = selectMsgById(id);
+        if (message != null) {
+            if (userJobNum.equals(message.getMsgReceiver())) {
+                if (deleteMsg(id)) {
+                    return Msg.success().addMsg("操作成功");
+                }
+                return Msg.fail().addMsg("操作失败");
+            }
+            return Msg.fail().addMsg("你没有权限");
+        }
+        return Msg.fail().addMsg("该消息记录不存在");
     }
 
     private Message selectMsgById(Integer id) {
@@ -90,7 +115,13 @@ public class MessageImpl implements MessageService {
         }
     }
 
+    private boolean deleteMsg(Integer id) {
+        return (messageMapper.deleteById(id) != 0);
+    }
+
+    //已读，删除公用方法
     private boolean deleteOrReadMsgById(Message msg, boolean flag) {
+        //flag true:软删除 false：标记未已读
         if (flag) {
             if (msg.getMsgIsDel().equals(1)) {
                 return false;
@@ -122,7 +153,12 @@ public class MessageImpl implements MessageService {
     private IPage<Message> selectMsgByCondition(Integer condition, Integer pageNum, Integer pageSize, String userJobNum) {
         Page<Message> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("message_is_del", 0).eq("message_receiver", userJobNum).orderByDesc("message_id");
+        queryWrapper.eq("message_receiver", userJobNum).orderByDesc("message_id");
+        if (condition == 3) {
+            queryWrapper.eq("message_is_del", 1);
+        } else {
+            queryWrapper.eq("message_is_del", 0);
+        }
         if (condition != 2) {
             queryWrapper.eq("message_state", condition);
         }

@@ -42,9 +42,9 @@ public class ApplicationImpl implements ApplicationService {
     public Msg ApplicationQuery(String JobNum, String condition, Integer pageNum, Integer pageSize, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         if (JobNum.equals(userJobNum)) {
-            IPage applicationIPage = selectApplicationByJobNum(JobNum, condition2state(condition), pageNum, pageSize);
+            IPage<Application> applicationIPage = selectApplicationByJobNum(JobNum, condition2state(condition), pageNum, pageSize);
             return Msg.success().addData("pageInfo", new PageUtil().createPageDto(applicationIPage))
-                    .addData("applicationList",  addDeptName(applicationIPage.getRecords()));
+                    .addData("applicationList", addDeptName(applicationIPage.getRecords()));
         }
         return Msg.fail().addMsg("你没有权限");
     }
@@ -64,17 +64,25 @@ public class ApplicationImpl implements ApplicationService {
 
 
     @Override
-    public Msg ApplicationReview(Integer id, Application application) {
-        if (id.equals(application.getAppId()) && !application.getAppState().equals(20)) {
-            if (updateApplicationById(application)) {
-                if (application.getAppState().equals(40)) {
-                    if (websiteImpl.addWebsiteByApplication(Application2Website(application))) {
+    public Msg ApplicationReview(Integer id, Integer state) {
+        if (state.equals(30) || state.equals(40)) {
+            Application application = selectApplicationById(id);
+            if (application != null) {
+                if (application.getAppState().equals(20)) {
+                    application.setAppState(state);
+                    if (updateApplicationById(application)) {
+                        //如果申请通过且申请操作为申请网站，则在网站表生成对应申请的网站
+                        if (application.getAppState().equals(40) && application.getAppRecOperate().equals(1)) {
+                            if (websiteImpl.addWebsiteByApplication(Application2Website(application))) {
+                                return Msg.success().addMsg("操作成功");
+                            }
+                        }
                         return Msg.success().addMsg("操作成功");
                     }
                 }
-                return Msg.success().addMsg("操作成功");
+                return Msg.fail().addMsg("该申请已审核");
             }
-            return Msg.fail().addMsg("操作失败");
+            return Msg.fail().addMsg("该申请不存在");
         }
         return Msg.fail().addMsg("参数错误");
     }
@@ -150,6 +158,14 @@ public class ApplicationImpl implements ApplicationService {
     private boolean updateApplicationById(Application application) {
         try {
             return (applicationMapper.updateById(application) != 0);
+        } catch (Exception e) {
+            throw new RuntimeException("操作失败");
+        }
+    }
+
+    private Application selectApplicationById(Integer id) {
+        try {
+            return applicationMapper.selectById(id);
         } catch (Exception e) {
             throw new RuntimeException("操作失败");
         }

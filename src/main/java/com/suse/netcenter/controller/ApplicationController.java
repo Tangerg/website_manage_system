@@ -57,8 +57,8 @@ public class ApplicationController extends BaseController {
     @ApiOperation("审核申请")
     @UserLoginToken
     @AdminToken
-    @PostMapping("/review/{id}")
-    public Msg ApplicationReview(@PathVariable("id") Integer id, @Valid @RequestBody Application application) {
-        return applicationService.ApplicationReview(id, application);
+    @PostMapping("/review/{id}/{state}")
+    public Msg ApplicationReview(@PathVariable("id") Integer id, @PathVariable("state") Integer state) {
+        return applicationService.ApplicationReview(id, state);
     }
 }
