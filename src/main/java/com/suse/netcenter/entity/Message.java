@@ -23,6 +23,10 @@ public class Message {
     @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "message_sender")
     private String msgSender;
+
+    @TableField(exist = false)
+    private String msgSenderName;
+
     @Pattern(regexp = "^\\d{5}$", message = "工号格式不正确")
     @TableField(value = "message_receiver")
     private String msgReceiver;

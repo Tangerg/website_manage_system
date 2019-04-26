@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Message;
+import com.suse.netcenter.entity.User;
 import com.suse.netcenter.mapper.MessageMapper;
 import com.suse.netcenter.service.MessageService;
 import com.suse.netcenter.util.PageUtil;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Tangerg
@@ -22,6 +24,8 @@ import java.util.Date;
 public class MessageImpl implements MessageService {
     @Autowired
     MessageMapper messageMapper;
+    @Autowired
+    UserImpl userImpl;
 
     @Override
     public Msg queryMsg(String condition, Integer pageNum, Integer pageSize, String token) {
@@ -41,9 +45,9 @@ public class MessageImpl implements MessageService {
             default:
                 break;
         }
-        IPage msgIpage = selectMsgByCondition(state, pageNum, pageSize, userJobNum);
+        IPage<Message> msgIpage = selectMsgByCondition(state, pageNum, pageSize, userJobNum);
         return Msg.success().addData("pageInfo", new PageUtil().createPageDto(msgIpage))
-                .addData("msgList", msgIpage.getRecords());
+                .addData("msgList", addSenderName(msgIpage.getRecords()));
     }
 
     @Override
@@ -149,19 +153,27 @@ public class MessageImpl implements MessageService {
             throw new RuntimeException("操作失败");
         }
     }
+    private List<Message> addSenderName(List<Message> messageList){
+        for (Message message : messageList) {
+            User user = userImpl.selectUserByJobNum(message.getMsgSender());
+            message.setMsgSenderName(user.getUserName());
+        }
+        return messageList;
+    }
 
     private IPage<Message> selectMsgByCondition(Integer condition, Integer pageNum, Integer pageSize, String userJobNum) {
         Page<Message> page = new Page<>(pageNum, pageSize);
         QueryWrapper<Message> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("message_receiver", userJobNum).orderByDesc("message_id");
+        queryWrapper.eq("message_receiver", userJobNum).orderByDesc("message_create_time");
         if (condition == 3) {
             queryWrapper.eq("message_is_del", 1);
         } else {
             queryWrapper.eq("message_is_del", 0);
+            if (condition != 2) {
+                queryWrapper.eq("message_state", condition);
+            }
         }
-        if (condition != 2) {
-            queryWrapper.eq("message_state", condition);
-        }
+
         try {
             return messageMapper.selectPage(page, queryWrapper);
         } catch (Exception e) {
