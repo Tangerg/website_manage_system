@@ -14,4 +14,5 @@ public interface ApplicationService {
     Msg ApplicationSubmit(Application application,String token);
     Msg ApplicationReview(Integer id,Integer state);
     Msg ApplicationQuery(String JobNum, String condition,Integer pageNum,Integer pageSize,String token);
+    Msg ApplicationQueryOne(Integer id,String token);
 }

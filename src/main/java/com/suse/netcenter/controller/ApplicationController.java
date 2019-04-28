@@ -39,6 +39,13 @@ public class ApplicationController extends BaseController {
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         return applicationService.ApplicationQueryAll(condition, pageNum, pageSize);
     }
+    //查询单个申请
+    @ApiOperation("查询单个申请")
+    @UserLoginToken
+    @GetMapping("/queryone/{id}")
+    public Msg ApplicationQueryOne(@PathVariable("id") Integer id,@RequestHeader String token) {
+        return applicationService.ApplicationQueryOne(id,token);
+    }
 
     //查询个人所有申请
     @ApiOperation("查询个人所有申请")

@@ -50,6 +50,23 @@ public class ApplicationImpl implements ApplicationService {
     }
 
     @Override
+    public Msg ApplicationQueryOne(Integer id,String token) {
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        String userRoles = JWT.decode(token).getAudience().get(3);
+
+        Application application = selectApplicationById(id);
+        if(application == null){
+            return Msg.fail().addMsg("该申请不存在");
+        }
+        //等于token中的工号或者权限为管理员
+        if (application.getAppWebDirectorNum().equals(userJobNum) || userRoles.equals("1")) {
+            addOneDeptName(application);
+            return Msg.success().addData("application", application);
+        }
+        return Msg.fail().addMsg("操作失败");
+    }
+
+    @Override
     public Msg ApplicationSubmit(Application application, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
         //验证网站负责人工号
@@ -117,6 +134,7 @@ public class ApplicationImpl implements ApplicationService {
         }
     }
 
+
     private IPage<Application> selectApplicationByPage(Integer state, Integer pageNum, Integer pageSize) {
         QueryWrapper<Application> queryWrapper = new QueryWrapper<Application>().orderByDesc("application_id");
         Page<Application> page = new Page<>(pageNum, pageSize);
@@ -132,16 +150,19 @@ public class ApplicationImpl implements ApplicationService {
 
     private List<Application> addDeptName(List<Application> applicationList) {
         for (Application application : applicationList) {
-            Department department = departmentImpl.selectDeptById(application.getAppDeptId());
-            if (department == null) {
-                application.setAppDeptName("部门不存在或未设置");
-            } else {
-                application.setAppDeptName(department.getDeptName());
-            }
+            addOneDeptName(application);
         }
         return applicationList;
     }
 
+    private void addOneDeptName(Application application){
+        Department department = departmentImpl.selectDeptById(application.getAppDeptId());
+        if (department == null) {
+            application.setAppDeptName("部门不存在或未设置");
+        } else {
+            application.setAppDeptName(department.getDeptName());
+        }
+    }
     private IPage<Application> selectApplicationByJobNum(String JobNum, Integer state, Integer pageNum, Integer pageSize) {
         QueryWrapper<Application> queryWrapper = new QueryWrapper<Application>().eq("application_website_director_num", JobNum).orderByDesc("application_id");
         Page<Application> page = new Page<>(pageNum, pageSize);
