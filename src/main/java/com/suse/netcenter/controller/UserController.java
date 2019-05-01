@@ -78,8 +78,8 @@ public class UserController extends BaseController {
     @UserLoginToken
     @AdminToken
     @PostMapping("/delete/{JobNum}")
-    public Msg userDelete(@PathVariable("JobNum") String JobNum) {
-        return userService.userDelete(JobNum);
+    public Msg userDelete(@PathVariable("JobNum") String JobNum, @RequestHeader String token) {
+        return userService.userDelete(JobNum, token);
     }
 
 
@@ -97,6 +97,6 @@ public class UserController extends BaseController {
     @UserLoginToken
     @PostMapping("/modify/{JobNum}")
     public Msg userAdd(@PathVariable("JobNum") String JobNum, @RequestBody PasswordDto password, @RequestHeader String token) {
-        return userService.modifyPassword(JobNum,password,token);
+        return userService.modifyPassword(JobNum, password, token);
     }
 }

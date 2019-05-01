@@ -95,7 +95,11 @@ public class UserImpl implements UserService {
      *   该用户的is_quit设置为1
      */
     @Override
-    public Msg userDelete(String JobNum) {
+    public Msg userDelete(String JobNum, String token) {
+        String userJobNum = JWT.decode(token).getAudience().get(1);
+        if(userJobNum.equals(JobNum)){
+            return Msg.fail().addMsg("不能删除自己");
+        }
         User user = selectUserByJobNum(JobNum);
         if (user == null) {
             return Msg.fail().addMsg("该用户不存在");
@@ -171,13 +175,13 @@ public class UserImpl implements UserService {
 
     //重置用户密码
     @Override
-    public Msg userResetPassword(String JobNum){
+    public Msg userResetPassword(String JobNum) {
         User user = selectUserByJobNum(JobNum);
         if (user == null) {
             return Msg.fail().addMsg("该用户不存在");
         }
         user.setUserPassword(user.getUserJobNum());
-        if(updateUserByIdAndJobNum(user)){
+        if (updateUserByIdAndJobNum(user)) {
             return Msg.success().addMsg("重置成功");
         }
         return Msg.fail().addMsg("发生错误，重置失败");
@@ -185,16 +189,16 @@ public class UserImpl implements UserService {
 
     //修改用户密码
     @Override
-    public Msg modifyPassword(String JobNum, PasswordDto password, String token){
+    public Msg modifyPassword(String JobNum, PasswordDto password, String token) {
         String userJobNum = JWT.decode(token).getAudience().get(1);
-        if(userJobNum.equals(JobNum)){
+        if (userJobNum.equals(JobNum)) {
             User user = selectUserByJobNum(JobNum);
             if (user == null) {
                 return Msg.fail().addMsg("该用户不存在");
             }
-            if(user.getUserPassword().equals(password.getPasswordOld())){
+            if (user.getUserPassword().equals(password.getPasswordOld())) {
                 user.setUserPassword(password.getPasswordNew());
-                if(updateUserByIdAndJobNum(user)){
+                if (updateUserByIdAndJobNum(user)) {
                     return Msg.success().addMsg("修改成功");
                 }
                 return Msg.fail().addMsg("修改失败");

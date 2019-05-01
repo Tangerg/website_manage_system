@@ -16,13 +16,13 @@ public interface UserService {
 
     Msg userAdd(User user);
 
-    Msg userDelete(String JobNum);
+    Msg userDelete(String JobNum, String token);
 
-    Msg userUpdate(String JobNum,User user,String token);
+    Msg userUpdate(String JobNum, User user, String token);
 
     Msg userQueryAll(Integer pageNum, Integer pageSize);
 
-    Msg userQuery(String JobNum,String token,Integer flag);
+    Msg userQuery(String JobNum, String token, Integer flag);
 
     Msg userInfo(String token);
 
