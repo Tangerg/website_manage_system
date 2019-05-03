@@ -119,6 +119,12 @@ public class UserImpl implements UserService {
         String userId = JWT.decode(token).getAudience().get(0);
         String userJobNum = JWT.decode(token).getAudience().get(1);
         String userRoles = JWT.decode(token).getAudience().get(3);
+        if(user.getUserOfficePhone() == null){
+            user.setUserOfficePhone("");
+        }
+        if(user.getUserTel() == null){
+            user.setUserTel("");
+        }
         //如果传入的参数能够和token中的对应或者权限为管理员
         if ((JobNum.equals(userJobNum) && userId.equals(user.getUserId().toString()) && JobNum.equals(user.getUserJobNum())) || userRoles.equals("1")) {
             if (updateUserByIdAndJobNum(user)) {

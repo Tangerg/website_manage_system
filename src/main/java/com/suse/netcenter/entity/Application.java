@@ -57,7 +57,7 @@ public class Application {
     private String appWebDirectorName;
 
     @NotNull(message = "网站负责人手机号不能为空")
-    @Pattern(regexp = "^(13[0-9]|14[5|7]|15[0|1|2|3|5|6|7|8|9]|18[0|1|2|3|5|6|7|8|9])\\d{8}$", message = "手机号格式不正确")
+    @Pattern(regexp = "^1([38][0-9]|4[579]|5[0-3,5-9]|6[6]|7[0135678]|9[89])\\d{8}$", message = "手机号格式不正确")
     @TableField(value = "application_website_director_phone")
     private String appWebDirectorTel;
 
@@ -107,9 +107,11 @@ public class Application {
     @TableField(value = "application_website_space_room")
     private String appWebsiteSpaceRoom;
 
+    //@Pattern(regexp = "^([0-9]|[1-9]\\d{1,3}|[1-5]\\d{4}|6[0-4]\\d{4}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])$", message = "端口范围0-65535")
     @TableField(value = "application_website_port_in")
     private Integer appWebsiteInPort;
 
+    //@Pattern(regexp = "^([0-9]|[1-9]\\d{1,3}|[1-5]\\d{4}|6[0-4]\\d{4}|65[0-4]\\d{2}|655[0-2]\\d|6553[0-5])$", message = "端口范围0-65535")
     @TableField(value = "application_website_port_out")
     private Integer appWebsiteOutPort;
 
