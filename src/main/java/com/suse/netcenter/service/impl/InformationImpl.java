@@ -44,15 +44,6 @@ public class InformationImpl implements InformationService {
                 .addData("logList", logPage.getRecords());
     }
 
-    public void addNewLog(Log log){
-        log.setLogId(0);
-        log.setLogCreateTime(new Date());
-        try {
-            logMapper.insert(log);
-        }catch (Exception e) {
-            throw new RuntimeException("操作失败");
-        }
-    }
     public void addNewRecord() {
         newCountRecord(infoCount());
     }

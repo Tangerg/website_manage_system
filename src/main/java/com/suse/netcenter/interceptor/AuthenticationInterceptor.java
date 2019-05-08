@@ -2,6 +2,7 @@ package com.suse.netcenter.interceptor;
 
 import com.auth0.jwt.JWT;
 import com.suse.netcenter.annotation.AdminToken;
+import com.suse.netcenter.annotation.LogRecord;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.service.LogService;
@@ -66,9 +67,15 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                             StringUtils.isEmpty(userName)) {
                         throw new RuntimeException("令牌解析错误，请重新登录");
                     }
-                    String ip = request.getRemoteAddr();//获取ip
-                    String path = request.getServletPath();//获取请求地址
-                    System.out.println(ip+path);
+                    if (method.isAnnotationPresent(LogRecord.class)) {
+                        LogRecord log = method.getAnnotation(LogRecord.class);
+                        if (log.required()) {
+                            String operate = log.operate();
+                            String ip = request.getRemoteAddr();//获取ip
+                            String path = request.getServletPath();//获取请求地址
+                            logService.addLog(userJobNum,userName,ip,path,operate);
+                        }
+                    }
                     //logService.addLog(userJobNum,ip,path);
                     //检查是否有AdminToken的注解，有则检查token
                     if (method.isAnnotationPresent(AdminToken.class)) {

@@ -22,14 +22,17 @@ public class Log {
     @TableField(value = "log_job_num")
     private String logJobNum;
 
+    @TableField(value = "log_name")
+    private String logName;
+
     @TableField(value = "log_ip")
     private String logIp;
 
+    @TableField(value = "log_path")
+    private String logPath;
+
     @TableField(value = "log_operate")
     private String logOperate;
-
-    @TableField(value = "log_additional")
-    private Integer logAdd;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @TableField(value = "log_create_time")

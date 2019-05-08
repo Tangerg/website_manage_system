@@ -1,6 +1,7 @@
 package com.suse.netcenter.controller;
 
 import com.suse.netcenter.annotation.AdminToken;
+import com.suse.netcenter.annotation.LogRecord;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Application;
@@ -23,6 +24,7 @@ public class ApplicationController extends BaseController {
     //正式提交
     @ApiOperation("正式提交申请")
     @UserLoginToken
+    @LogRecord(operate = "提交申请")
     @PostMapping("/submit")
     public Msg ApplicationSubmit(@Valid @RequestBody Application application, @RequestHeader String token) {
         return applicationService.ApplicationSubmit(application, token);
@@ -39,12 +41,13 @@ public class ApplicationController extends BaseController {
                                    @RequestParam(value = "pageSize", defaultValue = "10") Integer pageSize) {
         return applicationService.ApplicationQueryAll(condition, pageNum, pageSize);
     }
+
     //查询单个申请
     @ApiOperation("查询单个申请")
     @UserLoginToken
     @GetMapping("/queryone/{id}")
-    public Msg ApplicationQueryOne(@PathVariable("id") Integer id,@RequestHeader String token) {
-        return applicationService.ApplicationQueryOne(id,token);
+    public Msg ApplicationQueryOne(@PathVariable("id") Integer id, @RequestHeader String token) {
+        return applicationService.ApplicationQueryOne(id, token);
     }
 
     //查询个人所有申请
@@ -64,6 +67,7 @@ public class ApplicationController extends BaseController {
     @ApiOperation("审核申请")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "审核申请")
     @PostMapping("/review/{id}/{state}")
     public Msg ApplicationReview(@PathVariable("id") Integer id, @PathVariable("state") Integer state) {
         return applicationService.ApplicationReview(id, state);

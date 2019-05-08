@@ -1,6 +1,7 @@
 package com.suse.netcenter.controller;
 
 import com.suse.netcenter.annotation.AdminToken;
+import com.suse.netcenter.annotation.LogRecord;
 import com.suse.netcenter.annotation.PassToken;
 import com.suse.netcenter.annotation.UserLoginToken;
 import com.suse.netcenter.dto.Msg;
@@ -59,6 +60,7 @@ public class UserController extends BaseController {
     /*用户修改*/
     @ApiOperation("修改用户信息")
     @UserLoginToken
+    @LogRecord(operate = "修改用户")
     @PostMapping("/update/{JobNum}")
     public Msg userUpdate(@PathVariable("JobNum") String JobNum, @Valid @RequestBody User user, @RequestHeader String token) {
         return userService.userUpdate(JobNum, user, token);
@@ -68,6 +70,7 @@ public class UserController extends BaseController {
     @ApiOperation("新增用户")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "新增用户")
     @PostMapping("/add")
     public Msg userAdd(@Valid @RequestBody User user) {
         return userService.userAdd(user);
@@ -77,6 +80,7 @@ public class UserController extends BaseController {
     @ApiOperation("删除用户")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "删除用户")
     @PostMapping("/delete/{JobNum}")
     public Msg userDelete(@PathVariable("JobNum") String JobNum, @RequestHeader String token) {
         return userService.userDelete(JobNum, token);
@@ -87,6 +91,7 @@ public class UserController extends BaseController {
     @ApiOperation("重置用户密码")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "重置用户密码")
     @GetMapping("/reset/{JobNum}")
     public Msg userAdd(@PathVariable("JobNum") String JobNum) {
         return userService.userResetPassword(JobNum);
@@ -95,6 +100,7 @@ public class UserController extends BaseController {
     /*修改密码*/
     @ApiOperation("修改用户密码")
     @UserLoginToken
+    @LogRecord(operate = "修改密码")
     @PostMapping("/modify/{JobNum}")
     public Msg userAdd(@PathVariable("JobNum") String JobNum, @RequestBody PasswordDto password, @RequestHeader String token) {
         return userService.modifyPassword(JobNum, password, token);

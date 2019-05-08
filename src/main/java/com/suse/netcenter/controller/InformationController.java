@@ -23,6 +23,7 @@ public class InformationController extends BaseController {
     public Msg infoAllWebsite() {
         return informationService.infoAllWebsite();
     }
+
     /*查看日志信息*/
     @UserLoginToken
     @AdminToken

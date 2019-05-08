@@ -14,10 +14,10 @@ import java.util.Date;
  */
 public class TokenUtil {
     //签发人
-    private final static String Issuer = "SiChuanUniversity of Science & Engineering NetCenter";
+    private final static String ISSUER = "SiChuanUniversity of Science & Engineering NetCenter";
     //私钥
-    private final static String secret = "SiChuanUniversity of Science & Engineering Network management center";
-    private Algorithm algorithm = Algorithm.HMAC256(secret);
+    private final static String SECRET = "SiChuanUniversity of Science & Engineering Network management center";
+    private Algorithm algorithm = Algorithm.HMAC256(SECRET);
 
     //生成token的方法
     public String createToken(User user) {
@@ -31,18 +31,23 @@ public class TokenUtil {
         Date exp = new Date(expMillis);
 
         return JWT.create()
-                .withIssuer(Issuer)
+                .withIssuer(ISSUER)
                 .withIssuedAt(now)
                 .withExpiresAt(exp)
                 // 将 user的id,jobNum,name,role,保存到 token 里面
-                .withAudience(user.getUserId().toString(),user.getUserJobNum(),user.getUserName(),user.getUserRoles().toString() )
+                .withAudience(
+                        user.getUserId().toString(),
+                        user.getUserJobNum(),
+                        user.getUserName(),
+                        user.getUserRoles().toString()
+                )
                 .sign(algorithm);
     }
 
     //校验token的方法
     public boolean verifyToken(String token) {
         JWTVerifier jwtVerifier = JWT.require(algorithm)
-                .withIssuer(Issuer)
+                .withIssuer(ISSUER)
                 .build();
         try {
             jwtVerifier.verify(token);

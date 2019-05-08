@@ -13,16 +13,19 @@ import java.util.Date;
 public class LogImpl implements LogService {
     @Autowired
     LogMapper logMapper;
+
     @Override
-    public void addLog(String JobNum, String ip, String path) {
-        if(JobNum==null){
+    public void addLog(String JobNum, String name, String ip, String path,String operate) {
+        if (JobNum == null) {
             return;
         }
         Log log = new Log();
         log.setLogId(0);
         log.setLogIp(StringUtils.isEmpty(ip) ? "0.0.0.0" : ip);
-        log.setLogOperate(StringUtils.isEmpty(ip) ? "/" : path);
+        log.setLogPath(StringUtils.isEmpty(ip) ? "/" : path);
+        log.setLogOperate(operate);
         log.setLogJobNum(JobNum);
+        log.setLogName(name);
         log.setLogCreateTime(new Date());
         logMapper.insert(log);
     }

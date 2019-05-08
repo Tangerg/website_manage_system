@@ -1,8 +1,8 @@
 package com.suse.netcenter.controller;
 
 import com.suse.netcenter.annotation.AdminToken;
+import com.suse.netcenter.annotation.LogRecord;
 import com.suse.netcenter.annotation.UserLoginToken;
-import com.suse.netcenter.dto.DepartmentDto;
 import com.suse.netcenter.dto.Msg;
 import com.suse.netcenter.entity.Department;
 import io.swagger.annotations.Api;
@@ -23,6 +23,7 @@ public class DepartmentController extends BaseController {
     @ApiOperation("新增部门")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "新增部门")
     @PostMapping("/add")
     public Msg deptAdd(@Valid @RequestBody Department department) {
         return departmentService.deptAdd(department);
@@ -32,6 +33,7 @@ public class DepartmentController extends BaseController {
     @ApiOperation("删除部门")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "删除部门")
     @PostMapping("/delete/{id}")
     public Msg deptDelete(@PathVariable("id") Integer id) {
         return departmentService.deptDelete(id);
@@ -41,6 +43,7 @@ public class DepartmentController extends BaseController {
     @ApiOperation("修改部门")
     @UserLoginToken
     @AdminToken
+    @LogRecord(operate = "修改部门")
     @PostMapping("/update/{id}")
     public Msg deptUpdate(@PathVariable("id") Integer id,@Valid @RequestBody Department department) {
         return departmentService.deptUpdate(id, department);
